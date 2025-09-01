@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- O Tailwind via CDN é mantido por enquanto, mas o ideal em produção é instalá-lo via npm. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -41,6 +43,9 @@
         }
       }
     </script>
+
+    <!-- O importmap foi REMOVIDO. Esta é a correção principal. -->
+
   <script type="importmap">
 {
   "imports": {
@@ -53,6 +58,8 @@
 </head>
   <body class="bg-base-200">
     <div id="root"></div>
+    
+    <!-- O ponto de entrada para o Vite está correto. -->
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
