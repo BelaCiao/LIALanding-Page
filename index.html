@@ -43,10 +43,7 @@
         }
       }
     </script>
-
-    <!-- O importmap foi REMOVIDO. Esta é a correção principal. -->
-
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.1.1",
@@ -59,7 +56,7 @@
   <body class="bg-base-200">
     <div id="root"></div>
     
-    <!-- O ponto de entrada para o Vite está correto. -->
-    <script type="module" src="/src/index.tsx"></script>
+    <!-- O ponto de entrada para o Vite está correto, apontando para o arquivo na raiz. -->
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
