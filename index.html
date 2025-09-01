@@ -63,9 +63,12 @@
   }
 }
 </script>
+<!-- This script will transpile JSX and TSX on the fly -->
+<script src="https://unpkg.com/@babel/standalone@7.12.4/babel.min.js"></script>
 </head>
   <body class="bg-base-200">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <!-- Changed type to "text/babel" and added data-type="module" for Babel to process it correctly -->
+    <script type="text/babel" data-type="module" src="/index.tsx"></script>
   </body>
 </html>
