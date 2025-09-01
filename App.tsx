@@ -18,6 +18,7 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => (
         <span className="text-2xl font-bold text-content-100">Lia CRM AI</span>
       </div>
       <div className="hidden md:flex items-center space-x-6">
+        <button onClick={() => setCurrentPage('home')} className="text-content-200 hover:text-primary transition-colors font-medium">Início</button>
         <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="text-content-200 hover:text-primary transition-colors font-medium">Demonstração</a>
         <button onClick={() => setCurrentPage('about')} className="text-content-200 hover:text-primary transition-colors font-medium">Sobre</button>
         <button onClick={() => setCurrentPage('contact')} className="text-content-200 hover:text-primary transition-colors font-medium">Contato</button>
@@ -76,17 +77,15 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'contact'>('home');
   
   // Estados para gerenciar o ciclo de vida da inicialização da aplicação.
-  // Isso é crucial para evitar a "tela branca" em caso de falhas de rede.
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // useEffect para rodar a lógica de inicialização uma vez, quando o componente é montado.
   useEffect(() => {
     const initializeApp = async () => {
         try {
-            // 1. Início da tentativa de inicialização.
-            // Aqui seria o local ideal para chamadas de API (fetch) essenciais para a aplicação.
-            // Para este exemplo, simulamos uma operação assíncrona que pode falhar.
+            // Simula uma chamada de API ou carregamento de dados essenciais.
             await new Promise((resolve, reject) => {
                 setTimeout(() => {
                     // Para testar o tratamento de erro, podemos simular uma falha.
@@ -97,22 +96,18 @@ const App: React.FC = () => {
                     resolve(true);
                 }, 1500);
             });
-            // 2. Sucesso: Se a operação acima for bem-sucedida, não fazemos nada aqui.
-            // O `finally` cuidará de remover a tela de carregamento.
 
         } catch (err) {
-            // 3. Falha: Se a promessa for rejeitada (simulando um erro de fetch),
-            // capturamos o erro e atualizamos o estado de erro.
             if (err instanceof Error) {
                 setError(err.message);
             } else {
-                setError("Ocorreu um erro inesperado durante a inicialização.");
+                setError("Não foi possível conectar ao servidor. Por favor, tente novamente.");
             }
         } finally {
-            // 4. Conclusão: Este bloco é executado tanto em caso de sucesso quanto de falha.
-            // Definimos isLoading como false para remover a tela de carregamento e
-            // exibir a aplicação ou a tela de erro.
+            // Ao final, independentemente de sucesso ou falha,
+            // marcamos a inicialização como concluída e removemos o loading.
             setIsLoading(false);
+            setIsInitialized(true);
         }
     };
 
@@ -132,29 +127,34 @@ const App: React.FC = () => {
     }
   };
   
-  // Renderização Condicional: A chave para uma UX robusta.
-  // Com base nos estados, decidimos o que renderizar.
+  // Renderização Condicional Robusta
   
   if (isLoading) {
-    // Se estiver carregando, exibe a tela de loading.
+    // 1. Enquanto carrega, exibe a tela de loading.
     return <LoadingScreen />;
   }
 
   if (error) {
-    // Se houver um erro, exibe a tela de erro com uma mensagem clara.
+    // 2. Se houver um erro, exibe a tela de erro.
     return <ErrorScreen message={error} />;
   }
 
-  // Se não estiver carregando e não houver erro, renderiza a aplicação principal.
-  return (
-    <div className="min-h-screen bg-base-200 font-sans text-content-100">
-      <Header setCurrentPage={setCurrentPage} />
-      <main>
-        {renderPage()}
-      </main>
-      <Footer />
-    </div>
-  );
+  // 3. Somente se a inicialização foi concluída e sem erros, renderiza a aplicação.
+  if (isInitialized) {
+    return (
+      <div className="min-h-screen bg-base-200 font-sans text-content-100">
+        <Header setCurrentPage={setCurrentPage} />
+        <main>
+          {renderPage()}
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Fallback para o caso de a aplicação não estar carregando, sem erro, mas não inicializada.
+  // Em uma lógica normal, este estado não deveria ser alcançado.
+  return null;
 };
 
 export default App;
