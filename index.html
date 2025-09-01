@@ -16,38 +16,26 @@
               sans: ['Onest', 'sans-serif'],
             },
             colors: {
-              primary: '#007aff', // A vibrant blue
-              secondary: '#00c7b1', // A modern teal
+              primary: '#007aff',
+              secondary: '#00c7b1',
               'base-100': '#ffffff',
               'base-200': '#f7f8fc',
               'base-300': '#eef0f4',
-              'content-100': '#0d1126', // Dark text for high contrast
+              'content-100': '#0d1126',
               'content-200': '#555e75',
               'brand-dark': '#0a0f21'
             },
             animation: {
               'fade-in': 'fadeIn 0.7s ease-in-out',
               'fade-in-up': 'fadeInUp 0.7s ease-in-out',
-              'bubble-pop': 'bubblePop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
+              'bubble-pop': 'bubblePop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55 ) forwards',
               'slide-in-right': 'slideInRight 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards'
             },
             keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-               bubblePop: {
-                '0%': { opacity: '0', transform: 'scale(0.8) translateY(10px)' },
-                '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
-              },
-              slideInRight: {
-                '0%': { opacity: '0', transform: 'translateX(-50px)' },
-                '100%': { opacity: '1', transform: 'translateX(0)' },
-              }
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+              bubblePop: { '0%': { opacity: '0', transform: 'scale(0.8) translateY(10px)' }, '100%': { opacity: '1', transform: 'scale(1) translateY(0)' } },
+              slideInRight: { '0%': { opacity: '0', transform: 'translateX(-50px)' }, '100%': { opacity: '1', transform: 'translateX(0)' } }
             }
           }
         }
@@ -56,18 +44,15 @@
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
     "react": "https://aistudiocdn.com/react@^19.1.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/"
   }
 }
 </script>
-<!-- This script will transpile JSX and TSX on the fly -->
-<script src="https://unpkg.com/@babel/standalone@7.12.4/babel.min.js"></script>
 </head>
   <body class="bg-base-200">
     <div id="root"></div>
-    <!-- Changed type to "text/babel" and added data-type="module" for Babel to process it correctly -->
-    <script type="text/babel" data-type="module" src="/index.tsx"></script>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
