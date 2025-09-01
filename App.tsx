@@ -44,6 +44,7 @@ const Footer: React.FC = () => (
     </footer>
 );
 
+// Componente para a tela de carregamento, exibido enquanto os dados iniciais são buscados.
 const LoadingScreen: React.FC = () => (
     <div className="fixed inset-0 bg-base-200 flex flex-col items-center justify-center z-50">
         <LiaLogo />
@@ -51,6 +52,7 @@ const LoadingScreen: React.FC = () => (
     </div>
 );
 
+// Componente para a tela de erro, exibido se a busca de dados iniciais falhar.
 const ErrorScreen: React.FC<{ message: string }> = ({ message }) => (
     <div className="fixed inset-0 bg-base-100 flex flex-col items-center justify-center z-50 p-6 text-center">
          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
@@ -58,7 +60,7 @@ const ErrorScreen: React.FC<{ message: string }> = ({ message }) => (
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
         </div>
-        <h1 className="text-2xl font-bold text-content-100">Ocorreu um Erro</h1>
+        <h1 className="text-2xl font-bold text-content-100">Ocorreu um Erro na Inicialização</h1>
         <p className="mt-2 text-content-200 max-w-md">{message}</p>
         <button 
             onClick={() => window.location.reload()}
@@ -72,34 +74,50 @@ const ErrorScreen: React.FC<{ message: string }> = ({ message }) => (
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'contact'>('home');
+  
+  // Estados para gerenciar o ciclo de vida da inicialização da aplicação.
+  // Isso é crucial para evitar a "tela branca" em caso de falhas de rede.
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // useEffect para rodar a lógica de inicialização uma vez, quando o componente é montado.
   useEffect(() => {
     const initializeApp = async () => {
         try {
-            // Simula uma operação assíncrona, como buscar dados essenciais.
-            // Se isso falhar, o bloco catch irá lidar com o erro, prevenindo uma tela branca.
-            await new Promise(resolve => setTimeout(resolve, 1500)); 
-
-            // Descomente as linhas a seguir para testar o mecanismo de tratamento de erro:
-            // if (Math.random() > 0.5) {
-            //   throw new Error("Não foi possível carregar os dados essenciais. Verifique sua conexão e tente novamente.");
-            // }
+            // 1. Início da tentativa de inicialização.
+            // Aqui seria o local ideal para chamadas de API (fetch) essenciais para a aplicação.
+            // Para este exemplo, simulamos uma operação assíncrona que pode falhar.
+            await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // Para testar o tratamento de erro, podemos simular uma falha.
+                    // Descomente a linha abaixo para ver a tela de erro em ação.
+                    // if (Math.random() > 0.5) {
+                    //   return reject(new Error("Falha simulada ao buscar dados. Verifique sua conexão com a internet e tente novamente."));
+                    // }
+                    resolve(true);
+                }, 1500);
+            });
+            // 2. Sucesso: Se a operação acima for bem-sucedida, não fazemos nada aqui.
+            // O `finally` cuidará de remover a tela de carregamento.
 
         } catch (err) {
+            // 3. Falha: Se a promessa for rejeitada (simulando um erro de fetch),
+            // capturamos o erro e atualizamos o estado de erro.
             if (err instanceof Error) {
                 setError(err.message);
             } else {
                 setError("Ocorreu um erro inesperado durante a inicialização.");
             }
         } finally {
+            // 4. Conclusão: Este bloco é executado tanto em caso de sucesso quanto de falha.
+            // Definimos isLoading como false para remover a tela de carregamento e
+            // exibir a aplicação ou a tela de erro.
             setIsLoading(false);
         }
     };
 
     initializeApp();
-}, []);
+  }, []);
 
 
   const renderPage = () => {
@@ -114,15 +132,20 @@ const App: React.FC = () => {
     }
   };
   
+  // Renderização Condicional: A chave para uma UX robusta.
+  // Com base nos estados, decidimos o que renderizar.
+  
   if (isLoading) {
+    // Se estiver carregando, exibe a tela de loading.
     return <LoadingScreen />;
   }
 
   if (error) {
-      return <ErrorScreen message={error} />;
+    // Se houver um erro, exibe a tela de erro com uma mensagem clara.
+    return <ErrorScreen message={error} />;
   }
 
-
+  // Se não estiver carregando e não houver erro, renderiza a aplicação principal.
   return (
     <div className="min-h-screen bg-base-200 font-sans text-content-100">
       <Header setCurrentPage={setCurrentPage} />
