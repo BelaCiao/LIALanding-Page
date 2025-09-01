@@ -85,27 +85,26 @@ const App: React.FC = () => {
   useEffect(() => {
     const initializeApp = async () => {
         try {
-            // Simula uma chamada de API ou carregamento de dados essenciais.
+            // Aqui é onde uma chamada de API (fetch) essencial aconteceria.
+            // A simulação abaixo demonstra como a aplicação se comporta.
             await new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    // Para testar o tratamento de erro, podemos simular uma falha.
-                    // Descomente a linha abaixo para ver a tela de erro em ação.
-                    // if (Math.random() > 0.5) {
-                    //   return reject(new Error("Falha simulada ao buscar dados. Verifique sua conexão com a internet e tente novamente."));
-                    // }
-                    resolve(true);
+                    // Em um cenário real, um erro de rede (CORS, offline, etc.) causaria uma rejeição aqui.
+                    // Para testar, você pode descomentar a linha abaixo para simular a falha:
+                    // return reject(new Error("Falha simulada ao buscar dados iniciais."));
+                    resolve(true); // Simula uma conexão bem-sucedida.
                 }, 1500);
             });
 
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("Não foi possível conectar ao servidor. Por favor, tente novamente.");
-            }
+            // ESTRATÉGIA DE RESILIÊNCIA: Em vez de bloquear a UI com uma tela de erro,
+            // registramos o erro para depuração e permitimos que o app continue a renderizar.
+            // Isso torna a aplicação resiliente a problemas de conectividade com o backend no início.
+            console.warn("Falha ao conectar ao backend durante a inicialização. A aplicação continuará em um estado desconectado.", err);
+            // Propositalmente não chamamos setError() aqui, para evitar a tela de erro e a tela branca.
         } finally {
             // Ao final, independentemente de sucesso ou falha,
-            // marcamos a inicialização como concluída e removemos o loading.
+            // marcamos a inicialização como concluída e removemos a tela de carregamento.
             setIsLoading(false);
             setIsInitialized(true);
         }
@@ -135,11 +134,11 @@ const App: React.FC = () => {
   }
 
   if (error) {
-    // 2. Se houver um erro, exibe a tela de erro.
+    // 2. Se houver um erro *crítico* (que não seja da chamada inicial), exibe a tela de erro.
     return <ErrorScreen message={error} />;
   }
 
-  // 3. Somente se a inicialização foi concluída e sem erros, renderiza a aplicação.
+  // 3. Renderiza a aplicação principal assim que a inicialização for concluída (com ou sem sucesso da chamada de API).
   if (isInitialized) {
     return (
       <div className="min-h-screen bg-base-200 font-sans text-content-100">
@@ -153,7 +152,6 @@ const App: React.FC = () => {
   }
 
   // Fallback para o caso de a aplicação não estar carregando, sem erro, mas não inicializada.
-  // Em uma lógica normal, este estado não deveria ser alcançado.
   return null;
 };
 
