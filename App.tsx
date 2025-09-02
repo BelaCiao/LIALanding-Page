@@ -10,27 +10,78 @@ interface HeaderProps {
   setCurrentPage: (page: 'home' | 'about' | 'contact') => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => (
-  <header className="bg-base-100/80 shadow-sm sticky top-0 z-50 backdrop-blur-lg">
-    <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-      <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setCurrentPage('home')}>
-        <LiaLogo />
-        <span className="text-2xl font-bold text-content-100">Lia CRM AI</span>
-      </div>
-      <div className="hidden md:flex items-center space-x-6">
-        <button onClick={() => setCurrentPage('home')} className="text-content-200 hover:text-primary transition-colors font-medium">Início</button>
-        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="text-content-200 hover:text-primary transition-colors font-medium">Demonstração</a>
-        <button onClick={() => setCurrentPage('about')} className="text-content-200 hover:text-primary transition-colors font-medium">Sobre</button>
-        <button onClick={() => setCurrentPage('contact')} className="text-content-200 hover:text-primary transition-colors font-medium">Contato</button>
-      </div>
-       <div className="flex items-center space-x-4">
-        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-blue-600 transition-all font-semibold shadow-lg shadow-blue-500/20 hover:shadow-xl hover:-translate-y-0.5">
-          Quero a LIA IA
-        </a>
-      </div>
-    </nav>
-  </header>
-);
+const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    // Helper to handle navigation and close the mobile menu
+    const handleNavigate = (page: 'home' | 'about' | 'contact') => {
+        setCurrentPage(page);
+        setIsMenuOpen(false);
+    };
+
+    return (
+        <header className="bg-base-100/80 shadow-sm sticky top-0 z-50 backdrop-blur-lg">
+            <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
+                {/* Logo */}
+                <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNavigate('home')}>
+                    <LiaLogo />
+                    <span className="text-2xl font-bold text-content-100">Lia CRM AI</span>
+                </div>
+
+                {/* Desktop Menu */}
+                <div className="hidden md:flex items-center space-x-6">
+                    <button onClick={() => handleNavigate('home')} className="text-content-200 hover:text-primary transition-colors font-medium">Início</button>
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="text-content-200 hover:text-primary transition-colors font-medium">Demonstração</a>
+                    <button onClick={() => handleNavigate('about')} className="text-content-200 hover:text-primary transition-colors font-medium">Sobre</button>
+                    <button onClick={() => handleNavigate('contact')} className="text-content-200 hover:text-primary transition-colors font-medium">Contato</button>
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-blue-600 transition-all font-semibold shadow-lg shadow-blue-500/20 hover:shadow-xl hover:-translate-y-0.5">
+                        Quero a LIA IA
+                    </a>
+                </div>
+
+                {/* Mobile Menu Button (Hamburger) */}
+                <div className="md:hidden">
+                    <button 
+                        onClick={() => setIsMenuOpen(!isMenuOpen)} 
+                        aria-label="Abrir menu" 
+                        aria-expanded={isMenuOpen}
+                        className="text-content-100 p-2 rounded-md hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+                    >
+                        {isMenuOpen ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-16 6h16" />
+                            </svg>
+                        )}
+                    </button>
+                </div>
+            </nav>
+
+            {/* Mobile Menu Panel */}
+            <div 
+                className={`
+                    md:hidden absolute top-full left-0 w-full bg-base-100 shadow-lg transition-transform duration-300 ease-in-out
+                    ${isMenuOpen ? 'transform translate-y-0' : 'transform -translate-y-[120%]'}
+                `}
+            >
+                <div className="px-4 pt-2 pb-4 space-y-2">
+                    <button onClick={() => handleNavigate('home')} className="block w-full text-left px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Início</button>
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Demonstração</a>
+                    <button onClick={() => handleNavigate('about')} className="block w-full text-left px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Sobre</button>
+                    <button onClick={() => handleNavigate('contact')} className="block w-full text-left px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Contato</button>
+                    <div className="pt-4 mt-2 border-t border-base-200">
+                         <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-primary text-white px-5 py-3 rounded-lg hover:bg-blue-600 transition-all font-semibold shadow-lg shadow-blue-500/20">
+                            Quero a LIA IA
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+    );
+};
 
 const Footer: React.FC = () => (
     <footer className="bg-brand-dark text-white mt-16">
