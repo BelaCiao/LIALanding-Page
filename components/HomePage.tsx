@@ -53,7 +53,7 @@ const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showI
                     <svg viewBox="0 0 512 512" className="w-8 h-8 text-blue-500" fill="currentColor"><path d="M256 56C145.72 56 56 145.72 56 256s89.72 200 200 200 200-89.72 200-200S366.28 56 256 56zm0 368c-92.84 0-168-75.16-168-168S163.16 88 256 88s168 75.16 168 168-75.16 168-168 168z"/><path d="M298.33 194.55a53.82 53.82 0 00-42.33-22.18h-29.4c-32.51 0-58.93 26.42-58.93 58.93v0c0 20.33 10.53 39.11 27.24 49.91l46.25 30.83c6.74 4.5 15.61 1.25 18.5-6.35l1.24-3.3c3-8.31-4-17-12.8-19.9l-30.33-10c-4.63-1.52-7.6-6-7.6-10.8v-9.53c0-9.53 7.73-17.26 17.26-17.26h29.4c16.14 0 29.4-13.26 29.4-29.4s-13.26-29.4-29.4-29.4z"/></svg>
                  </div>
                  <div className="truncate">
-                    <h3 className="font-semibold text-base">Clínica Sorriso Ideal</h3>
+                    <h3 className="font-semibold text-sm">Clínica Sorriso Ideal</h3>
                     <p className="text-xs text-gray-200">online</p>
                  </div>
             </div>
