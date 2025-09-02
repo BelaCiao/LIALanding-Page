@@ -50,6 +50,7 @@ const PhoneMockup: React.FC<PhoneMockupProps> = ({ showResponse, isTyping }) => 
         <div className="h-[40px] w-[3px] bg-gray-800 absolute -start-[13px] top-[150px] rounded-s-lg"></div>
         <div className="h-[60px] w-[3px] bg-gray-800 absolute -end-[13px] top-[120px] rounded-e-lg"></div>
         <div className="rounded-[2rem] overflow-hidden w-full h-full bg-white">
+            {/* Header do Chat: Altura total é 56px (py-2 + h-10 => 8px + 40px + 8px) */}
             <div className="bg-[#005e54] text-white px-4 py-2 flex items-center gap-3 shadow-md">
                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
                     <img src="https://i.imgur.com/bB1p95b.png" alt="Logo da Clínica Sorriso Ideal" className="w-full h-full object-cover" />
@@ -59,7 +60,8 @@ const PhoneMockup: React.FC<PhoneMockupProps> = ({ showResponse, isTyping }) => 
                     <p className="text-[10px] lowercase">online</p>
                  </div>
             </div>
-            <div className="h-[calc(100%-52px)] bg-[#e5ddd5] bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-center p-4 space-y-4 flex flex-col justify-end">
+            {/* Área do Chat: A altura é calculada subtraindo a altura do header (56px) do total. */}
+            <div className="h-[calc(100%-56px)] bg-[#e5ddd5] bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-center p-4 space-y-4 flex flex-col justify-end">
                 <div className="animate-bubble-pop">
                     <ChatBubble 
                         sender="user" 
