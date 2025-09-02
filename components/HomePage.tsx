@@ -14,7 +14,7 @@ const ChatBubble: React.FC<{ message: string; sender: 'user' | 'ia'; timestamp: 
     return (
         <div className={`flex items-end gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
             <div className={`relative max-w-[85%] px-3 py-2 rounded-xl shadow-md ${isUser ? 'bg-[#dcf8c6] text-content-100 rounded-br-none' : 'bg-base-100 text-content-100 rounded-bl-none'}`}>
-                <p className="text-sm leading-snug">{message}</p>
+                <p className="text-sm leading-snug break-words">{message}</p>
                 <div className="flex items-center justify-end gap-1 mt-1.5">
                     <p className="text-[10px] text-gray-400">{timestamp}</p>
                     {isUser && showChecks && <DoubleCheckIcon />}
