@@ -2,14 +2,15 @@
 
 import React, { useState } from 'react';
 import { CrmIcon, CheckCircleIcon, ClockIcon, DoubleCheckIcon } from './icons';
+import SignupForm from './SignupForm'; // <<-- 1. IMPORTAÇÃO ADICIONADA AQUI
 
 const whatsappLink = "https://wa.me/555399640159";
 
 // ==================================================================
-// CORREÇÃO: DEFINIÇÃO DOS COMPONENTES QUE ESTAVAM FALTANDO
+// DEFINIÇÃO DOS COMPONENTES QUE ESTAVAM FALTANDO
 // ==================================================================
 
-const ChatBubble: React.FC<{ message: string; sender: 'user' | 'ia'; timestamp: string; showChecks?: boolean; }> = ({ message, sender, timestamp, showChecks } ) => {
+const ChatBubble: React.FC<{ message: string; sender: 'user' | 'ia'; timestamp: string; showChecks?: boolean; }> = ({ message, sender, timestamp, showChecks }  ) => {
     const isUser = sender === 'user';
     return (
         <div className={`flex items-end gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -57,7 +58,7 @@ const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showI
                     <p className="text-xs text-gray-200">online</p>
                  </div>
             </div>
-            <div className="flex-grow h-[calc(100%-56px)] bg-[#e5ddd5] bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png' )] bg-center p-3 sm:p-4 space-y-4 flex flex-col justify-end">
+            <div className="flex-grow h-[calc(100%-56px)] bg-[#e5ddd5] bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'  )] bg-center p-3 sm:p-4 space-y-4 flex flex-col justify-end">
                 {showUserMessage && (
                     <div className="animate-bubble-pop">
                         <ChatBubble sender="user" message="Olá, gostaria de saber mais sobre o tratamento de clareamento dental. Vocês poderiam me passar o valor?" timestamp="10:30" showChecks />
@@ -202,8 +203,16 @@ const HomePage: React.FC = () => {
                     </a>
                 </div>
             </section>
+
+            {/* ================================================================== */}
+            {/* 2. FORMULÁRIO DE CADASTRO ADICIONADO AQUI                      */}
+            {/* ================================================================== */}
+            <section id="signup" className={`${sectionBaseClasses}`}>
+                <SignupForm />
+            </section>
+
         </div>
-     );
+      );
 };
 
 export default HomePage;
