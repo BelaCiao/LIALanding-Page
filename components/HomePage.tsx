@@ -25,12 +25,25 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ message, sender, timestamp, sho
     );
 };
 
+const TypingIndicator: React.FC = () => (
+    <div className="flex items-end gap-2.5 justify-start animate-bubble-pop">
+        <div className="relative max-w-[80%] p-3 rounded-xl shadow-sm bg-base-100 text-content-100 rounded-bl-none">
+            <div className="flex items-center justify-center space-x-1 h-5">
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-dot" style={{ animationDelay: '0s' }}></span>
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-dot" style={{ animationDelay: '0.2s' }}></span>
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-dot" style={{ animationDelay: '0.4s' }}></span>
+            </div>
+        </div>
+    </div>
+);
+
 
 interface PhoneMockupProps {
     showResponse: boolean;
+    isTyping: boolean;
 }
 
-const PhoneMockup: React.FC<PhoneMockupProps> = ({ showResponse }) => (
+const PhoneMockup: React.FC<PhoneMockupProps> = ({ showResponse, isTyping }) => (
     <div className="relative mx-auto border-gray-800 bg-gray-800 border-[10px] rounded-[2.5rem] h-[550px] w-[280px] shadow-2xl">
         <div className="w-[140px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
         <div className="h-[40px] w-[3px] bg-gray-800 absolute -start-[13px] top-[100px] rounded-s-lg"></div>
@@ -55,6 +68,7 @@ const PhoneMockup: React.FC<PhoneMockupProps> = ({ showResponse }) => (
                         showChecks
                     />
                 </div>
+                {isTyping && <TypingIndicator />}
                 {showResponse && (
                     <div className="animate-bubble-pop" style={{animationDelay: '0.5s'}}>
                       <ChatBubble 
@@ -72,10 +86,24 @@ const PhoneMockup: React.FC<PhoneMockupProps> = ({ showResponse }) => (
 
 const HomePage: React.FC = () => {
     const [step, setStep] = useState(0);
+    const [isTyping, setIsTyping] = useState(false);
+    const [showResponse, setShowResponse] = useState(false);
 
-    const sectionBaseClasses = "transition-all duration-700 ease-in-out py-16 sm:py-24 px-6 container mx-auto text-center";
+    const sectionBaseClasses = "transition-all duration-1000 ease-in-out py-16 sm:py-24 px-6 container mx-auto text-center";
     const sectionVisibleClasses = "opacity-100 translate-y-0";
     const sectionHiddenClasses = "opacity-0 translate-y-5 pointer-events-none";
+
+    const handleShowIaResponse = () => {
+        if (showResponse || isTyping) return;
+
+        setStep(2);
+        setIsTyping(true);
+
+        setTimeout(() => {
+            setIsTyping(false);
+            setShowResponse(true);
+        }, 2000);
+    };
 
     return (
         <div className="overflow-x-hidden animate-fade-in">
@@ -135,12 +163,12 @@ const HomePage: React.FC = () => {
                          </div>
                     </div>
                     <div>
-                        <PhoneMockup showResponse={step >= 2} />
+                        <PhoneMockup showResponse={showResponse} isTyping={isTyping} />
                     </div>
                 </div>
                 <div className="mt-12 text-center">
                     {step === 1 && (
-                        <button onClick={() => setStep(2)} className="bg-secondary text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-teal-500 animate-fade-in transition-all transform hover:scale-105 shadow-lg shadow-teal-500/20">
+                        <button onClick={handleShowIaResponse} className="bg-secondary text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-teal-500 animate-fade-in transition-all transform hover:scale-105 shadow-lg shadow-teal-500/20">
                             Ver a Resposta da LIA
                         </button>
                     )}
