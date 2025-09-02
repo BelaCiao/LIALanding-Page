@@ -1,10 +1,15 @@
+// src/components/HomePage.tsx
+
 import React, { useState } from 'react';
 import { CrmIcon, CheckCircleIcon, ClockIcon, DoubleCheckIcon } from './icons';
 
 const whatsappLink = "https://wa.me/555399640159";
 
-// Componente ChatBubble com pequenos ajustes de estilo para maior polimento.
-const ChatBubble: React.FC<{ message: string; sender: 'user' | 'ia'; timestamp: string; showChecks?: boolean; }> = ({ message, sender, timestamp, showChecks }) => {
+// ==================================================================
+// CORREÇÃO: DEFINIÇÃO DOS COMPONENTES QUE ESTAVAM FALTANDO
+// ==================================================================
+
+const ChatBubble: React.FC<{ message: string; sender: 'user' | 'ia'; timestamp: string; showChecks?: boolean; }> = ({ message, sender, timestamp, showChecks } ) => {
     const isUser = sender === 'user';
     return (
         <div className={`flex items-end gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -19,7 +24,6 @@ const ChatBubble: React.FC<{ message: string; sender: 'user' | 'ia'; timestamp: 
     );
 };
 
-// Componente para o indicador de "digitando...", essencial para o realismo da conversa.
 const TypingIndicator: React.FC = () => (
     <div className="flex items-end gap-2 justify-start animate-bubble-pop">
         <div className="relative max-w-[80%] p-3 rounded-xl shadow-md bg-base-100 text-content-100 rounded-bl-none">
@@ -32,7 +36,11 @@ const TypingIndicator: React.FC = () => (
     </div>
 );
 
-// Mockup do celular, agora totalmente responsivo e com um novo ícone de perfil.
+// ==================================================================
+// FIM DA CORREÇÃO
+// ==================================================================
+
+
 const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showIaResponse: boolean; }> = ({ showUserMessage, isTyping, showIaResponse }) => (
     <div className="relative mx-auto border-gray-900 bg-gray-900 border-[8px] sm:border-[10px] rounded-[2rem] sm:rounded-[2.5rem] h-[480px] w-[240px] sm:h-[550px] sm:w-[280px] shadow-2xl">
         <div className="w-[100px] sm:w-[140px] h-[16px] sm:h-[18px] bg-gray-900 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
@@ -49,7 +57,7 @@ const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showI
                     <p className="text-xs text-gray-200">online</p>
                  </div>
             </div>
-            <div className="flex-grow h-[calc(100%-56px)] bg-[#e5ddd5] bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-center p-3 sm:p-4 space-y-4 flex flex-col justify-end">
+            <div className="flex-grow h-[calc(100%-56px)] bg-[#e5ddd5] bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png' )] bg-center p-3 sm:p-4 space-y-4 flex flex-col justify-end">
                 {showUserMessage && (
                     <div className="animate-bubble-pop">
                         <ChatBubble sender="user" message="Olá, gostaria de saber mais sobre o tratamento de clareamento dental. Vocês poderiam me passar o valor?" timestamp="10:30" showChecks />
@@ -66,7 +74,6 @@ const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showI
     </div>
 );
 
-// Componente HomePage com a nova lógica de animação cinematográfica.
 const HomePage: React.FC = () => {
     const [step, setStep] = useState(0);
     const [isTyping, setIsTyping] = useState(false);
@@ -196,7 +203,7 @@ const HomePage: React.FC = () => {
                 </div>
             </section>
         </div>
-    );
+     );
 };
 
 export default HomePage;
