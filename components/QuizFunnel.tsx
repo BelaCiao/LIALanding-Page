@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BackArrowIcon, ChevronRightIcon, SuccessIcon } from './icons';
+import ParticleBackground from './ParticleBackground';
 
 interface QuizFunnelProps {
     onClose: () => void;
@@ -36,7 +37,7 @@ const quizSteps = [
     },
     {
         id: 3,
-        theme: 'light',
+        theme: 'dark',
         key: 'secretaries',
         question: 'Quantas Secretárias?',
         options: ['Apenas 1', '2', '3', '4', '5 ou mais'],
@@ -103,7 +104,9 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
         setMessage(null);
         
         const formPayload = {
-            _subject: "Novo Lead Qualificado - LIA IA CRM",
+            _subject: "Você tem um novo LEAD! - LIA IA CRM",
+            _sms: "+5553999335369",
+            _smsMessage: `Você tem um novo LEAD! Nome: ${formData.name}, WhatsApp: ${formData.whatsapp}.`,
             Nome: formData.name,
             Whatsapp: formData.whatsapp,
             Email: formData.email,
@@ -233,20 +236,19 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
         if (step < quizSteps.length) {
             return quizSteps[step].theme === 'dark';
         }
-        return isDarkTheme || step === quizSteps.length + 2; // Success screen is also dark
+        // Form step is light, success is dark
+        return step === quizSteps.length || step === quizSteps.length + 2;
     };
 
+    const isBgDark = isCurrentStepDark();
 
     return (
-        <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-colors duration-500 ${isDarkTheme || step === quizSteps.length+2 ? 'bg-brand-dark' : 'bg-base-200'} overflow-hidden`}>
-            <div
-                className={`absolute top-0 left-0 w-[200%] h-[200%] z-0 animate-particles ${
-                    isDarkTheme || step === quizSteps.length+2
-                    ? 'bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.1)_1px,_transparent_0)]'
-                    : 'bg-[radial-gradient(circle_at_1px_1px,_rgba(0,0,0,0.08)_1px,_transparent_0)]'
-                }`}
-                style={{ backgroundSize: '40px 40px' }}
-            />
+        <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-colors duration-500 ${isBgDark ? 'bg-brand-dark' : 'bg-base-200'} overflow-hidden`}>
+            {isBgDark ? (
+                <ParticleBackground particleColor="rgba(255, 255, 255, 0.2)" lineColor="rgba(255, 255, 255, 0.1)" />
+            ) : (
+                <ParticleBackground particleColor="rgba(0, 0, 0, 0.2)" lineColor="rgba(0, 0, 0, 0.1)" />
+            )}
             
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
                  <div className="w-full absolute top-0 left-0 p-4 max-w-5xl mx-auto">
@@ -254,11 +256,11 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                         <div className="bg-white h-1.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
                     </div>
                     {step > 0 && step <= quizSteps.length && !isLoading && (
-                        <button onClick={handleBack} className={`absolute top-8 left-6 p-2 rounded-full transition-colors ${isCurrentStepDark() ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Voltar">
+                        <button onClick={handleBack} className={`absolute top-8 left-6 p-2 rounded-full transition-colors ${isBgDark ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Voltar">
                             <BackArrowIcon />
                         </button>
                     )}
-                     <button onClick={onClose} className={`absolute top-8 right-6 p-2 rounded-full transition-colors text-2xl font-bold ${isCurrentStepDark() ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Fechar">
+                     <button onClick={onClose} className={`absolute top-8 right-6 p-2 rounded-full transition-colors text-2xl font-bold ${isBgDark ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Fechar">
                         &times;
                     </button>
                 </div>
@@ -267,7 +269,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                     {renderStepContent()}
                 </div>
 
-                <div className={`absolute bottom-4 text-xs ${isDarkTheme || step === quizSteps.length+2 ? 'text-gray-400' : 'text-gray-500'}`}>
+                <div className={`absolute bottom-4 text-xs ${isBgDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     &copy; {new Date().getFullYear()} LIA IA CRM.
                 </div>
             </div>

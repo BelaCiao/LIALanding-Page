@@ -17,7 +17,7 @@ const ContactPage: React.FC = () => {
         const formJson = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch('https://formsubmit.co/ajax/maicongoisdonascimento@gmail.com', {
+            const response = await fetch('https://formsubmit.co/ajax/maicongn@hotmail.com', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

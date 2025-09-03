@@ -40,11 +40,11 @@ const TypingIndicator: React.FC = () => (
 
 
 const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showIaResponse: boolean; }> = ({ showUserMessage, isTyping, showIaResponse }) => (
-    <div className="relative mx-auto border-black bg-black border-[8px] sm:border-[10px] rounded-[2rem] sm:rounded-[2.5rem] h-[480px] w-[240px] sm:h-[550px] sm:w-[280px] shadow-2xl shadow-blue-500/10">
+    <div className="relative mx-auto border-gray-700 bg-black border-[8px] sm:border-[10px] rounded-[2rem] sm:rounded-[2.5rem] h-[480px] w-[240px] sm:h-[550px] sm:w-[280px] shadow-2xl shadow-blue-500/10">
         <div className="w-[100px] sm:w-[140px] h-[16px] sm:h-[18px] bg-black top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
-        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-700 absolute -start-[11px] sm:-start-[13px] top-[80px] sm:top-[100px] rounded-s-lg"></div>
-        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-700 absolute -start-[11px] sm:-start-[13px] top-[120px] sm:top-[150px] rounded-s-lg"></div>
-        <div className="h-[50px] sm:h-[60px] w-[3px] bg-gray-700 absolute -end-[11px] sm:-end-[13px] top-[100px] sm:top-[120px] rounded-e-lg"></div>
+        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-600 absolute -start-[11px] sm:-start-[13px] top-[80px] sm:top-[100px] rounded-s-lg"></div>
+        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-600 absolute -start-[11px] sm:-start-[13px] top-[120px] sm:top-[150px] rounded-s-lg"></div>
+        <div className="h-[50px] sm:h-[60px] w-[3px] bg-gray-600 absolute -end-[11px] sm:-end-[13px] top-[100px] sm:top-[120px] rounded-e-lg"></div>
         <div className="rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden w-full h-full bg-white flex flex-col">
             <div className="bg-[#005e54] text-white px-3 pt-3 pb-1 flex items-center gap-3 shadow-md h-[56px] flex-shrink-0">
                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">

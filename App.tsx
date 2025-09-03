@@ -3,6 +3,7 @@ import HomePage from './components/HomePage';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
 import QuizFunnel from './components/QuizFunnel';
+import ParticleBackground from './components/ParticleBackground';
 import { LiaLogo } from './components/icons';
 
 interface HeaderProps {
@@ -200,8 +201,7 @@ const App: React.FC = () => {
   if (isInitialized) {
     return (
       <div className="relative min-h-screen font-sans bg-gradient-to-br from-brand-dark-start to-brand-dark-end overflow-hidden">
-        {/* The animated background element */}
-        <div className="absolute top-0 left-0 w-[200%] h-[200%] z-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.1)_1px,_transparent_0)] [background-size:40px_40px] animate-particles" />
+        <ParticleBackground particleColor="rgba(255, 255, 255, 0.2)" lineColor="rgba(255, 255, 255, 0.1)" />
         
         {/* The actual content, positioned above the background */}
         <div className="relative z-10 flex flex-col min-h-screen">
