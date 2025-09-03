@@ -1,10 +1,7 @@
 // src/components/HomePage.tsx
 
-import React, { useState } from 'react';
-import { CrmIcon, CheckCircleIcon, ClockIcon, DoubleCheckIcon } from './icons';
-import SignupForm from './SignupForm'; // <<-- 1. IMPORTAÇÃO ADICIONADA AQUI
-
-const whatsappLink = "https://wa.me/555399640159";
+import React, { useState, useEffect, useRef } from 'react';
+import { CrmIcon, CheckCircleIcon, ClockIcon, DoubleCheckIcon, LiaAiIcon } from './icons';
 
 // ==================================================================
 // DEFINIÇÃO DOS COMPONENTES QUE ESTAVAM FALTANDO
@@ -75,34 +72,55 @@ const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showI
     </div>
 );
 
-const HomePage: React.FC = () => {
-    const [step, setStep] = useState(0);
+const useAnimateOnScroll = (options?: IntersectionObserverInit) => {
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                setIsVisible(true);
+                if (ref.current) {
+                    observer.unobserve(ref.current);
+                }
+            }
+        }, { threshold: 0.1, ...options });
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, [options]);
+
+    return [ref, isVisible] as const;
+};
+
+
+const HomePage: React.FC<{ onStartQuiz: () => void }> = ({ onStartQuiz }) => {
     const [isTyping, setIsTyping] = useState(false);
     const [showIaResponse, setShowIaResponse] = useState(false);
     const [showUserMessage, setShowUserMessage] = useState(false);
 
-    const handleStartDemo = () => {
-        setStep(1);
-        setTimeout(() => {
-            setShowUserMessage(true);
-            document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-    };
+    const [demoRef, isDemoVisible] = useAnimateOnScroll();
+    const [crmRef, isCrmVisible] = useAnimateOnScroll();
+    const [ctaRef, isCtaVisible] = useAnimateOnScroll();
 
-    const handleShowIaResponse = () => {
-        if (showIaResponse || isTyping) return;
-        setStep(2);
-        setIsTyping(true);
-        setTimeout(() => {
-            setIsTyping(false);
-            setShowIaResponse(true);
-        }, 1800);
-    };
-
-    const handleShowCrm = () => {
-        setStep(3);
-        document.getElementById('crm-view')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
+    useEffect(() => {
+        if (isDemoVisible) {
+            // Inicia a sequência de animação do chat quando a seção fica visível
+            setTimeout(() => setShowUserMessage(true), 300);
+            setTimeout(() => setIsTyping(true), 1200);
+            setTimeout(() => {
+                setIsTyping(false);
+                setShowIaResponse(true);
+            }, 3000);
+        }
+    }, [isDemoVisible]);
 
     const sectionBaseClasses = "transition-all duration-700 ease-in-out py-16 sm:py-24 px-6 container mx-auto";
 
@@ -110,46 +128,47 @@ const HomePage: React.FC = () => {
         <div className="overflow-x-hidden animate-fade-in">
             {/* Seção Hero */}
             <section className={`${sectionBaseClasses} min-h-[70vh] flex flex-col justify-center text-center`}>
-                <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-content-100 tracking-tight leading-tight">
-                    Não Perca Mais Nenhum Paciente do <span className="text-primary">WhatsApp</span>.
+                <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-tight">
+                    Sua agenda lotada, <span className="text-primary">sem tocar no telefone.</span>
                 </h1>
-                <p className="mt-6 max-w-3xl mx-auto text-lg text-content-200">
-                    LIA IA qualifica, agenda e gerencia seus leads 24/7, transformando conversas em pacientes fiéis para sua clínica.
+                <p className="mt-6 max-w-3xl mx-auto text-lg text-gray-300">
+                    A Lia IA qualifica, agenda e confirma seus pacientes 24/7, para que sua equipe possa focar no que realmente importa: o atendimento humanizado.
                 </p>
                 <div className="mt-10">
-                    <button onClick={handleStartDemo} className="bg-primary text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-all transform hover:scale-105 shadow-2xl shadow-blue-500/30">
-                        Iniciar Demonstração Interativa
+                    <button onClick={onStartQuiz} className="bg-primary text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-all transform hover:scale-105 shadow-2xl shadow-blue-500/30">
+                        Iniciar Diagnóstico Gratuito
                     </button>
                 </div>
             </section>
 
             {/* Demonstração Interativa */}
-            <section id="demo" className={`${sectionBaseClasses} ${step >= 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <section ref={demoRef} id="demo" className={`${sectionBaseClasses} transition-opacity duration-1000 ${isDemoVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
                  <div className="text-center">
-                    <h2 className="text-3xl sm:text-4xl font-bold text-content-100 mb-2 transition-all duration-500">
-                        {step < 2 ? '1. Um novo paciente entra em contato...' : '2. LIA IA responde instantaneamente!'}
+                    <h2 className="text-3xl sm:text-4xl font-bold text-white mb-12">
+                        Sua clínica sofre com algum destes problemas?
                     </h2>
-                    <p className="text-content-200 mb-12 max-w-2xl mx-auto transition-all duration-500">
-                        {step < 2 
-                            ? 'Veja como um simples contato no WhatsApp se torna uma oportunidade de negócio, sem que sua equipe precise parar o que está fazendo.'
-                            : 'Com inteligência e personalização, a LIA qualifica o lead e sugere o próximo passo, mantendo o paciente engajado.'
-                        }
-                    </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     <div className="text-left space-y-6">
-                         <div className="flex items-start gap-4 p-5 rounded-xl bg-base-100 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                         <div className={`flex items-start gap-4 p-5 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-700 ease-out ${isDemoVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '200ms' }}>
                              <div className="bg-blue-100 text-primary rounded-full p-3 flex-shrink-0"><CheckCircleIcon /></div>
                              <div>
-                                 <h3 className="font-bold text-lg text-content-100">Qualificação Automática</h3>
-                                 <p className="text-content-200">LIA entende a necessidade do paciente e coleta as informações essenciais para a clínica.</p>
+                                 <h3 className="font-bold text-lg text-white">Leads não respondem?</h3>
+                                 <p className="text-gray-300">A Lia aborda cada novo contato em menos de 5 segundos via WhatsApp, aumentando em até 70% a chance de agendamento.</p>
                              </div>
                          </div>
-                         <div className="flex items-start gap-4 p-5 rounded-xl bg-base-100 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                         <div className={`flex items-start gap-4 p-5 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-700 ease-out ${isDemoVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '400ms' }}>
                              <div className="bg-green-100 text-secondary rounded-full p-3 flex-shrink-0"><ClockIcon /></div>
                              <div>
-                                 <h3 className="font-bold text-lg text-content-100">Agendamento Inteligente 24/7</h3>
-                                 <p className="text-content-200">A IA sugere horários e realiza o pré-agendamento da consulta, direto na conversa, a qualquer hora do dia.</p>
+                                 <h3 className="font-bold text-lg text-white">Agenda com buracos e faltas?</h3>
+                                 <p className="text-gray-300">Nossa IA confirma as consultas de forma inteligente e preenche cancelamentos automaticamente, recuperando sua receita perdida.</p>
+                             </div>
+                         </div>
+                         <div className={`flex items-start gap-4 p-5 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-700 ease-out ${isDemoVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '600ms' }}>
+                             <div className="bg-purple-100 text-purple-500 rounded-full p-3 flex-shrink-0"><LiaAiIcon /></div>
+                             <div>
+                                 <h3 className="font-bold text-lg text-white">Secretária sobrecarregada?</h3>
+                                 <p className="text-gray-300">Liberte sua equipe de tarefas repetitivas. Deixe a Lia cuidar do online para que sua secretária possa encantar os pacientes no balcão.</p>
                              </div>
                          </div>
                     </div>
@@ -157,28 +176,42 @@ const HomePage: React.FC = () => {
                         <PhoneMockup showUserMessage={showUserMessage} showIaResponse={showIaResponse} isTyping={isTyping} />
                     </div>
                 </div>
-                <div className="mt-12 text-center h-14">
-                    {step === 1 && !isTyping && !showIaResponse && (
-                        <button onClick={handleShowIaResponse} className="bg-secondary text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-teal-500 animate-fade-in transition-all transform hover:scale-105 shadow-lg shadow-teal-500/20">
-                            Ver a Resposta da LIA
-                        </button>
-                    )}
-                    {showIaResponse && (
-                         <button onClick={handleShowCrm} className="bg-primary text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 animate-fade-in transition-all transform hover:scale-105 shadow-lg shadow-blue-500/20">
-                            Ver Lead no CRM
-                        </button>
-                    )}
-                </div>
             </section>
 
-             {/* Visualização do CRM */}
-            <section id="crm-view" className={`${sectionBaseClasses} text-center ${step >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'}`}>
-                <h2 className="text-3xl sm:text-4xl font-bold text-content-100 mb-2">3. Tudo centralizado no seu CRM.</h2>
-                <p className="text-content-200 mb-12 max-w-3xl mx-auto">
-                    O novo lead é criado automaticamente no painel da LIA, com todo o histórico da conversa e status atualizado. Sua equipe só precisa agir.
+             {/* Como Funciona */}
+            <section ref={crmRef} id="how-it-works" className={`${sectionBaseClasses} text-center transition-opacity duration-1000 ${isCrmVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Veja a Lia em Ação em 3 Passos Simples</h2>
+                <p className="text-gray-300 mb-12 max-w-3xl mx-auto">
+                    O paciente entra em contato, a LIA agenda, e você vê sua clínica lotar. Simples assim.
                 </p>
-                <div className="max-w-5xl mx-auto bg-base-100 rounded-xl shadow-2xl p-2 border border-base-300">
-                     <div className="bg-gray-200 rounded-t-lg p-2 flex items-center gap-1.5">
+                <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 text-left">
+                    {/* Step 1 */}
+                    <div className={`p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg transition-all duration-700 ease-out ${isCrmVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '100ms' }}>
+                        <div className="flex items-center gap-4">
+                            <span className="text-4xl font-black text-primary opacity-50">1</span>
+                            <h3 className="font-bold text-xl text-white">O Paciente Chama</h3>
+                        </div>
+                        <p className="mt-3 text-gray-300">Seja por WhatsApp, Instagram ou Site, a Lia está pronta para atender instantaneamente, 24/7.</p>
+                    </div>
+                     {/* Step 2 */}
+                    <div className={`p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg transition-all duration-700 ease-out ${isCrmVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '300ms' }}>
+                        <div className="flex items-center gap-4">
+                            <span className="text-4xl font-black text-primary opacity-50">2</span>
+                            <h3 className="font-bold text-xl text-white">A Lia Agenda</h3>
+                        </div>
+                        <p className="mt-3 text-gray-300">Ela consulta sua agenda em tempo real, oferece horários livres e marca a consulta sem intervenção humana.</p>
+                    </div>
+                     {/* Step 3 */}
+                     <div className={`p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg transition-all duration-700 ease-out ${isCrmVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '500ms' }}>
+                        <div className="flex items-center gap-4">
+                            <span className="text-4xl font-black text-primary opacity-50">3</span>
+                            <h3 className="font-bold text-xl text-white">Você Vê a Agenda Lotar</h3>
+                        </div>
+                        <p className="mt-3 text-gray-300">Acompanhe novos agendamentos entrando direto no seu CRM, enquanto sua equipe foca nos pacientes.</p>
+                    </div>
+                </div>
+                 <div className={`mt-12 max-w-5xl mx-auto bg-white/5 backdrop-blur-sm rounded-xl shadow-2xl p-2 border border-white/10 transition-all duration-700 ease-out ${isCrmVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                     <div className="bg-gray-800/50 rounded-t-lg p-2 flex items-center gap-1.5">
                         <div className="w-3 h-3 rounded-full bg-red-400"></div>
                         <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                         <div className="w-3 h-3 rounded-full bg-green-400"></div>
@@ -188,29 +221,20 @@ const HomePage: React.FC = () => {
             </section>
 
             {/* Seção CTA Final */}
-            <section id="cta" className={`bg-base-100 rounded-xl max-w-6xl my-16 mx-auto transition-all duration-700 ${step >= 3 ? 'opacity-100' : 'opacity-0'} ${sectionBaseClasses} text-center`}>
-                <CrmIcon />
-                <h2 className="text-3xl sm:text-4xl font-bold text-content-100 mt-4">Pronto para automatizar sua clínica?</h2>
-                <p className="mt-4 max-w-2xl mx-auto text-lg text-content-200">
-                   Deixe a LIA IA cuidar dos seus leads e foque no que você faz de melhor: atender seus pacientes.
-                </p>
-                <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-                     <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-transform transform hover:scale-105 w-full sm:w-auto">
-                        Quero a LIA IA na Minha Clínica
-                    </a>
-                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-base-200 text-content-100 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-base-300 transition-colors w-full sm:w-auto">
-                        Agendar uma Demonstração
-                    </a>
+            <section ref={ctaRef} id="cta" className={`${sectionBaseClasses} transition-opacity duration-1000 ${isCtaVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl max-w-6xl mx-auto p-12 sm:p-16 text-center">
+                    <CrmIcon />
+                    <h2 className="text-3xl sm:text-4xl font-bold text-white mt-4">Transforme o caos em lucro.</h2>
+                    <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-300">
+                       Chega de perder pacientes por falta de tempo ou falha humana. Deixe a Lia IA ser sua máquina de agendamentos 24/7.
+                    </p>
+                    <div className="mt-8 flex justify-center">
+                         <button onClick={onStartQuiz} className="bg-primary text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-transform transform hover:scale-105 w-full sm:w-auto shadow-2xl shadow-blue-500/30">
+                            Iniciar Diagnóstico Gratuito
+                        </button>
+                    </div>
                 </div>
             </section>
-
-            {/* ================================================================== */}
-            {/* 2. FORMULÁRIO DE CADASTRO ADICIONADO AQUI                      */}
-            {/* ================================================================== */}
-            <section id="signup" className={`${sectionBaseClasses}`}>
-                <SignupForm />
-            </section>
-
         </div>
       );
 };

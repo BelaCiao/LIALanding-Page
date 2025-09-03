@@ -25,14 +25,17 @@
               'base-300': '#eef0f4',
               'content-100': '#0d1126',
               'content-200': '#555e75',
-              'brand-dark': '#0a0f21'
+              'brand-dark': '#0a0f21',
+              'brand-dark-start': '#0a0f21',
+              'brand-dark-end': '#0c1b3a',
             },
             animation: {
               'fade-in': 'fadeIn 0.7s ease-in-out',
               'fade-in-up': 'fadeInUp 0.7s ease-in-out',
               'bubble-pop': 'bubblePop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55 ) forwards',
               'slide-in-right': 'slideInRight 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards',
-              'typing-dot': 'typingDot 1.4s infinite ease-in-out both'
+              'typing-dot': 'typingDot 1.4s infinite ease-in-out both',
+              'particles': 'move-particles 20s linear infinite',
             },
             keyframes: {
               fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
@@ -42,7 +45,11 @@
               typingDot: {
                 '0%, 80%, 100%': { transform: 'scale(0)', opacity: '0' },
                 '40%': { transform: 'scale(1)', opacity: '1' }
-              }
+              },
+              'move-particles': {
+                '0%': { transform: 'translate(0, 0)' },
+                '100%': { transform: 'translate(-200px, -200px)' },
+              },
             }
           }
         }
@@ -58,7 +65,7 @@
 }
 </script>
 </head>
-  <body class="bg-base-200">
+  <body class="bg-brand-dark-start">
     <div id="root"></div>
     
     <!-- O ponto de entrada para o Vite está correto, apontando para o arquivo na raiz. -->

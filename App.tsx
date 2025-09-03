@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import HomePage from './components/HomePage';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
+import QuizFunnel from './components/QuizFunnel';
 import { LiaLogo } from './components/icons';
-
-const whatsappLink = "https://wa.me/555399640159";
 
 interface HeaderProps {
   setCurrentPage: (page: 'home' | 'about' | 'contact') => void;
+  onStartQuiz: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
+const Header: React.FC<HeaderProps> = ({ setCurrentPage, onStartQuiz }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // Helper to handle navigation and close the mobile menu
@@ -19,24 +19,29 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
         setIsMenuOpen(false);
     };
 
+    const handleQuizAndCloseMenu = () => {
+        onStartQuiz();
+        setIsMenuOpen(false);
+    }
+
     return (
-        <header className="bg-base-100/80 shadow-sm sticky top-0 z-50 backdrop-blur-lg">
+        <header className="bg-brand-dark-end/80 shadow-sm sticky top-0 z-50 backdrop-blur-lg">
             <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
                 {/* Logo */}
                 <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNavigate('home')}>
                     <LiaLogo />
-                    <span className="text-2xl font-bold text-content-100">Lia CRM AI</span>
+                    <span className="text-2xl font-bold text-white">Lia CRM AI</span>
                 </div>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center space-x-6">
-                    <button onClick={() => handleNavigate('home')} className="text-content-200 hover:text-primary transition-colors font-medium">Início</button>
-                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="text-content-200 hover:text-primary transition-colors font-medium">Demonstração</a>
-                    <button onClick={() => handleNavigate('about')} className="text-content-200 hover:text-primary transition-colors font-medium">Sobre</button>
-                    <button onClick={() => handleNavigate('contact')} className="text-content-200 hover:text-primary transition-colors font-medium">Contato</button>
-                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-blue-600 transition-all font-semibold shadow-lg shadow-blue-500/20 hover:shadow-xl hover:-translate-y-0.5">
-                        Quero a LIA IA
-                    </a>
+                    <button onClick={() => handleNavigate('home')} className="text-gray-300 hover:text-white transition-colors font-medium">Início</button>
+                    <button onClick={onStartQuiz} className="text-gray-300 hover:text-white transition-colors font-medium">Demonstração</button>
+                    <button onClick={() => handleNavigate('about')} className="text-gray-300 hover:text-white transition-colors font-medium">Sobre</button>
+                    <button onClick={() => handleNavigate('contact')} className="text-gray-300 hover:text-white transition-colors font-medium">Contato</button>
+                    <button onClick={onStartQuiz} className="bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-blue-600 transition-all font-semibold shadow-lg shadow-blue-500/20 hover:shadow-xl hover:-translate-y-0.5">
+                        Fazer Diagnóstico
+                    </button>
                 </div>
 
                 {/* Mobile Menu Button (Hamburger) */}
@@ -45,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
                         onClick={() => setIsMenuOpen(!isMenuOpen)} 
                         aria-label="Abrir menu" 
                         aria-expanded={isMenuOpen}
-                        className="text-content-100 p-2 rounded-md hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+                        className="text-white p-2 rounded-md hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
                     >
                         {isMenuOpen ? (
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -63,19 +68,19 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
             {/* Mobile Menu Panel */}
             <div 
                 className={`
-                    md:hidden absolute top-full left-0 w-full bg-base-100 shadow-lg transition-transform duration-300 ease-in-out
+                    md:hidden absolute top-full left-0 w-full bg-brand-dark-end shadow-lg transition-transform duration-300 ease-in-out
                     ${isMenuOpen ? 'transform translate-y-0' : 'transform -translate-y-[120%]'}
                 `}
             >
                 <div className="px-4 pt-2 pb-4 space-y-2">
-                    <button onClick={() => handleNavigate('home')} className="block w-full text-left px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Início</button>
-                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Demonstração</a>
-                    <button onClick={() => handleNavigate('about')} className="block w-full text-left px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Sobre</button>
-                    <button onClick={() => handleNavigate('contact')} className="block w-full text-left px-4 py-2 text-lg text-content-200 rounded-md hover:bg-base-200 hover:text-primary">Contato</button>
-                    <div className="pt-4 mt-2 border-t border-base-200">
-                         <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-primary text-white px-5 py-3 rounded-lg hover:bg-blue-600 transition-all font-semibold shadow-lg shadow-blue-500/20">
-                            Quero a LIA IA
-                        </a>
+                    <button onClick={() => handleNavigate('home')} className="block w-full text-left px-4 py-2 text-lg text-gray-300 rounded-md hover:bg-white/10 hover:text-white">Início</button>
+                    <button onClick={handleQuizAndCloseMenu} className="block w-full text-left px-4 py-2 text-lg text-gray-300 rounded-md hover:bg-white/10 hover:text-white">Demonstração</button>
+                    <button onClick={() => handleNavigate('about')} className="block w-full text-left px-4 py-2 text-lg text-gray-300 rounded-md hover:bg-white/10 hover:text-white">Sobre</button>
+                    <button onClick={() => handleNavigate('contact')} className="block w-full text-left px-4 py-2 text-lg text-gray-300 rounded-md hover:bg-white/10 hover:text-white">Contato</button>
+                    <div className="pt-4 mt-2 border-t border-gray-700">
+                         <button onClick={handleQuizAndCloseMenu} className="block w-full text-center bg-primary text-white px-5 py-3 rounded-lg hover:bg-blue-600 transition-all font-semibold shadow-lg shadow-blue-500/20">
+                            Fazer Diagnóstico
+                        </button>
                     </div>
                 </div>
             </div>
@@ -84,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ setCurrentPage }) => {
 };
 
 const Footer: React.FC = () => (
-    <footer className="bg-brand-dark text-white mt-16">
+    <footer className="bg-brand-dark text-white">
         <div className="container mx-auto px-6 py-12 text-center">
             <div className="flex justify-center items-center space-x-3 mb-4">
                 <LiaLogo />
@@ -126,6 +131,7 @@ const ErrorScreen: React.FC<{ message: string }> = ({ message }) => (
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'contact'>('home');
+  const [isQuizVisible, setQuizVisible] = useState(false);
   
   // Estados para gerenciar o ciclo de vida da inicialização da aplicação.
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -164,6 +170,7 @@ const App: React.FC = () => {
     initializeApp();
   }, []);
 
+  const handleStartQuiz = () => setQuizVisible(true);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -173,7 +180,7 @@ const App: React.FC = () => {
         return <ContactPage />;
       case 'home':
       default:
-        return <HomePage />;
+        return <HomePage onStartQuiz={handleStartQuiz} />;
     }
   };
   
@@ -192,12 +199,21 @@ const App: React.FC = () => {
   // 3. Renderiza a aplicação principal assim que a inicialização for concluída (com ou sem sucesso da chamada de API).
   if (isInitialized) {
     return (
-      <div className="min-h-screen bg-base-200 font-sans text-content-100">
-        <Header setCurrentPage={setCurrentPage} />
-        <main>
-          {renderPage()}
-        </main>
-        <Footer />
+      <div className="relative min-h-screen font-sans bg-gradient-to-br from-brand-dark-start to-brand-dark-end overflow-hidden">
+        {/* The animated background element */}
+        <div className="absolute top-0 left-0 w-[200%] h-[200%] z-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.1)_1px,_transparent_0)] [background-size:40px_40px] animate-particles" />
+        
+        {/* The actual content, positioned above the background */}
+        <div className="relative z-10 flex flex-col min-h-screen">
+          <Header setCurrentPage={setCurrentPage} onStartQuiz={handleStartQuiz} />
+          <main className="flex-grow">
+            {renderPage()}
+          </main>
+          <Footer />
+        </div>
+
+        {/* Quiz Funnel is outside the main content flow to overlay everything */}
+        {isQuizVisible && <QuizFunnel onClose={() => setQuizVisible(false)} />}
       </div>
     );
   }

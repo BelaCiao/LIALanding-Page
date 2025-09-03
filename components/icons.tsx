@@ -43,3 +43,23 @@ export const DoubleCheckIcon: React.FC = () => (
         <path d="m6.25 10.97-3.146-3.147a.5.5 0 1 1 .708-.708l2.79 2.79 6.353-6.354a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
     </svg>
 );
+
+export const ChevronRightIcon: React.FC = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+    </svg>
+);
+
+export const BackArrowIcon: React.FC = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+);
+
+export const SuccessIcon: React.FC = () => (
+    <div className="w-16 h-16 bg-green-500 rounded-lg flex items-center justify-center animate-bubble-pop shadow-lg shadow-green-500/30">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+    </div>
+);
