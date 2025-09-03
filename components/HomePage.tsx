@@ -42,13 +42,13 @@ const TypingIndicator: React.FC = () => (
 const PhoneMockup: React.FC<{ showUserMessage: boolean; isTyping: boolean; showIaResponse: boolean; }> = ({ showUserMessage, isTyping, showIaResponse }) => (
     <div className="relative mx-auto border-gray-700 bg-black border-[8px] sm:border-[10px] rounded-[2rem] sm:rounded-[2.5rem] h-[480px] w-[240px] sm:h-[550px] sm:w-[280px] shadow-2xl shadow-blue-500/10">
         <div className="w-[100px] sm:w-[140px] h-[16px] sm:h-[18px] bg-black top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
-        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-600 absolute -start-[11px] sm:-start-[13px] top-[80px] sm:top-[100px] rounded-s-lg"></div>
-        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-600 absolute -start-[11px] sm:-start-[13px] top-[120px] sm:top-[150px] rounded-s-lg"></div>
-        <div className="h-[50px] sm:h-[60px] w-[3px] bg-gray-600 absolute -end-[11px] sm:-end-[13px] top-[100px] sm:top-[120px] rounded-e-lg"></div>
+        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-400 absolute -start-[11px] sm:-start-[13px] top-[80px] sm:top-[100px] rounded-s-lg"></div>
+        <div className="h-[30px] sm:h-[40px] w-[3px] bg-gray-400 absolute -start-[11px] sm:-start-[13px] top-[120px] sm:top-[150px] rounded-s-lg"></div>
+        <div className="h-[50px] sm:h-[60px] w-[3px] bg-gray-400 absolute -end-[11px] sm:-end-[13px] top-[100px] sm:top-[120px] rounded-e-lg"></div>
         <div className="rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden w-full h-full bg-white flex flex-col">
             <div className="bg-[#005e54] text-white px-3 pt-3 pb-1 flex items-center gap-3 shadow-md h-[56px] flex-shrink-0">
                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <svg viewBox="0 0 512 512" className="w-8 h-8 text-blue-500" fill="currentColor"><path d="M256 56C145.72 56 56 145.72 56 256s89.72 200 200 200 200-89.72 200-200S366.28 56 256 56zm0 368c-92.84 0-168-75.16-168-168S163.16 88 256 88s168 75.16 168 168-75.16 168-168 168z"/><path d="M298.33 194.55a53.82 53.82 0 00-42.33-22.18h-29.4c-32.51 0-58.93 26.42-58.93 58.93v0c0 20.33 10.53 39.11 27.24 49.91l46.25 30.83c6.74 4.5 15.61 1.25 18.5-6.35l1.24-3.3c3-8.31-4-17-12.8-19.9l-30.33-10c-4.63-1.52-7.6-6-7.6-10.8v-9.53c0-9.53 7.73-17.26 17.26-17.26h29.4c16.14 0 29.4-13.26 29.4-29.4s-13.26-29.4-29.4-29.4z"/></svg>
+                    <svg viewBox="0 0 512 512" className="w-8 h-8 text-blue-500" fill="currentColor"><path d="M256 56C145.72 56 56 145.72 56 256s89.72 200 200 200 200-89.72 200-200S366.28 56 256 56zm0 368c-92.84 0-168-75.16-168-168S163.16 88 256 88s168 75.16 168 168-75.16 168-168 168z"/><path d="M298.33 194.55a53.82 53.82 0 00-42.33-22.18h-29.4c-32.51 0-58.93 26.42-58.93 58.93v0c0 20.33 10.53 39.11 27.24 49.91l46.25 30.83c6.74 4.5 15.61 1.25 18.5-6.35l1.24-3.3c3-8.31-4-17-12.8-19.9l-30.33-10c-4.63-1.52-7.6-6-7.6-10.8v-9.53c0-9.53 7.73-17.26 17.26-17.26h29.4c16.14 0-29.4-13.26 29.4-29.4s-13.26-29.4-29.4-29.4z"/></svg>
                  </div>
                  <div className="truncate">
                     <h3 className="font-semibold text-sm">Clínica Sorriso Ideal</h3>
