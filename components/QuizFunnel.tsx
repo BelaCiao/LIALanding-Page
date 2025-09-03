@@ -54,7 +54,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
     const [progress, setProgress] = useState(0);
     
-    const isDarkTheme = step < 2;
+    const isDarkTheme = step < 2 || step >= quizSteps.length;
 
     useEffect(() => {
         // Handle loading simulation
@@ -143,8 +143,8 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
             const currentQuestion = quizSteps[step];
             return (
                 <div key={currentQuestion.id} className="w-full max-w-2xl px-6 text-center animate-fade-in-up">
-                    <h1 className={`text-3xl sm:text-4xl font-bold ${isDarkTheme ? 'text-white' : 'text-content-100'}`}>{currentQuestion.question}</h1>
-                    {currentQuestion.subtitle && <p className={`mt-3 text-lg ${isDarkTheme ? 'text-gray-300' : 'text-content-200'}`}>{currentQuestion.subtitle}</p>}
+                    <h1 className={`text-3xl sm:text-4xl font-bold ${currentQuestion.theme === 'dark' ? 'text-white' : 'text-content-100'}`}>{currentQuestion.question}</h1>
+                    {currentQuestion.subtitle && <p className={`mt-3 text-lg ${currentQuestion.theme === 'dark' ? 'text-gray-300' : 'text-content-200'}`}>{currentQuestion.subtitle}</p>}
                     <div className="mt-10 grid grid-cols-1 gap-3">
                         {currentQuestion.options.map((option, index) => (
                             <button
@@ -152,7 +152,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                                 onClick={() => handleSelectOption(currentQuestion.key, option)}
                                 className={`w-full text-left p-4 rounded-lg text-lg font-medium transition-all duration-200 transform hover:scale-105 ${
                                     currentQuestion.theme === 'dark'
-                                    ? 'bg-gray-800/50 hover:bg-gray-700/80 text-white flex justify-between items-center'
+                                    ? 'bg-gray-800/50 hover:bg-gray-700/80 text-white flex justify-between items-center backdrop-blur-sm'
                                     : 'bg-base-100 hover:bg-base-300 border border-base-300 text-content-100'
                                 }`}
                             >
@@ -167,10 +167,11 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
 
         if (isLoading) {
              return (
-                <div className="w-full max-w-lg px-6 text-center animate-fade-in text-content-100">
-                    <h2 className="text-3xl font-bold">Carregando Demonstração</h2>
-                    <div className="mt-6 w-full bg-base-300 rounded-full h-2.5">
-                        <div className="bg-primary h-2.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+                <div className="w-full max-w-lg px-6 text-center animate-fade-in text-white">
+                    <h2 className="text-3xl font-bold">Analisando suas respostas...</h2>
+                    <p className="mt-2 text-gray-300">Estamos preparando uma demonstração personalizada para você.</p>
+                    <div className="mt-6 w-full bg-white/20 rounded-full h-2.5">
+                        <div className="bg-white h-2.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
                     </div>
                     <p className="mt-3 text-lg font-semibold">{Math.round(progress)}%</p>
                 </div>
@@ -214,8 +215,8 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
             return (
                  <div className="w-full max-w-lg px-6 text-center animate-fade-in-up flex flex-col items-center">
                     <SuccessIcon />
-                    <h1 className="mt-8 text-4xl font-bold text-content-100">Deu tudo certo!</h1>
-                    <p className="mt-4 text-lg text-content-200 max-w-md">
+                    <h1 className="mt-8 text-4xl font-bold text-white">Deu tudo certo!</h1>
+                    <p className="mt-4 text-lg text-gray-300 max-w-md">
                         Em até 12 horas nossa equipe vai te ligar e agendar uma demonstração com um de nossos especialistas.
                     </p>
                     <button onClick={onClose} className="mt-10 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all">
@@ -228,26 +229,47 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
         return null;
     };
 
-    return (
-        <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-colors duration-500 ${isDarkTheme ? 'bg-brand-dark' : 'bg-base-200'}`}>
-            <div className="w-full absolute top-0 left-0 p-4">
-                <div className="w-full bg-gray-500/30 rounded-full h-1.5">
-                    <div className="bg-white h-1.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
-                </div>
-                {step > 0 && step <= quizSteps.length && !isLoading && (
-                    <button onClick={handleBack} className={`absolute top-8 left-6 p-2 rounded-full transition-colors ${isDarkTheme ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Voltar">
-                        <BackArrowIcon />
-                    </button>
-                )}
-                 <button onClick={onClose} className={`absolute top-8 right-6 p-2 rounded-full transition-colors text-2xl font-bold ${isDarkTheme ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Fechar">
-                    &times;
-                </button>
-            </div>
-            
-            {renderStepContent()}
+    const isCurrentStepDark = () => {
+        if (step < quizSteps.length) {
+            return quizSteps[step].theme === 'dark';
+        }
+        return isDarkTheme || step === quizSteps.length + 2; // Success screen is also dark
+    };
 
-            <div className={`absolute bottom-4 text-xs ${isDarkTheme ? 'text-gray-400' : 'text-gray-500'}`}>
-                &copy; {new Date().getFullYear()} LIA IA CRM.
+
+    return (
+        <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-colors duration-500 ${isDarkTheme || step === quizSteps.length+2 ? 'bg-brand-dark' : 'bg-base-200'} overflow-hidden`}>
+            <div
+                className={`absolute top-0 left-0 w-[200%] h-[200%] z-0 animate-particles ${
+                    isDarkTheme || step === quizSteps.length+2
+                    ? 'bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.1)_1px,_transparent_0)]'
+                    : 'bg-[radial-gradient(circle_at_1px_1px,_rgba(0,0,0,0.08)_1px,_transparent_0)]'
+                }`}
+                style={{ backgroundSize: '40px 40px' }}
+            />
+            
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+                 <div className="w-full absolute top-0 left-0 p-4 max-w-5xl mx-auto">
+                    <div className="w-full bg-gray-500/30 rounded-full h-1.5">
+                        <div className="bg-white h-1.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+                    </div>
+                    {step > 0 && step <= quizSteps.length && !isLoading && (
+                        <button onClick={handleBack} className={`absolute top-8 left-6 p-2 rounded-full transition-colors ${isCurrentStepDark() ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Voltar">
+                            <BackArrowIcon />
+                        </button>
+                    )}
+                     <button onClick={onClose} className={`absolute top-8 right-6 p-2 rounded-full transition-colors text-2xl font-bold ${isCurrentStepDark() ? 'text-white hover:bg-white/10' : 'text-content-100 hover:bg-black/10'}`} aria-label="Fechar">
+                        &times;
+                    </button>
+                </div>
+                
+                <div className="flex-grow flex items-center justify-center w-full">
+                    {renderStepContent()}
+                </div>
+
+                <div className={`absolute bottom-4 text-xs ${isDarkTheme || step === quizSteps.length+2 ? 'text-gray-400' : 'text-gray-500'}`}>
+                    &copy; {new Date().getFullYear()} LIA IA CRM.
+                </div>
             </div>
         </div>
     );
