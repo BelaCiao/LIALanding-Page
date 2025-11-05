@@ -17,7 +17,7 @@ const Header: React.FC<{ onScheduleClick: () => void }> = ({ onScheduleClick }) 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-4">
                      <a 
-                        href="https://wa.me/5553999335369" 
+                        href="https://wa.me/555399640159" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         aria-label="Contact on WhatsApp"
@@ -41,7 +41,7 @@ const Footer: React.FC = () => (
                 <LianetLogo />
                 <span className="text-2xl font-bold">LIANET Soluções</span>
             </div>
-            <p className="text-gray-400">Seu parceiro estratégico de Field Service e Suporte NOC na Região Sul.</p>
+            <p className="text-gray-400">Seu especialista local em TI e Redes na Região Sul. Soluções remotas e presenciais para empresas, provedores e residências.</p>
             <p className="mt-8 text-sm text-gray-500">&copy; {new Date().getFullYear()} LIANET Soluções. Todos os direitos reservados.</p>
         </div>
     </footer>

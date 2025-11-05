@@ -39,7 +39,7 @@ const FallbackErrorScreen: React.FC<{ error: Error | null }> = ({ error }) => {
 
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: The state class property was replaced with a constructor to explicitly initialize state and call super(props). This ensures that `this.props` is correctly typed and available throughout the component, resolving the "Property 'props' does not exist" error.
+  // FIX: Reverted to using a constructor for state initialization. While class property initialization is a modern approach, using a constructor with a `super(props)` call is a more explicit and robust way to ensure the component's `props` are correctly set up, resolving the 'property does not exist' error.
   constructor(props: Props) {
     super(props);
     this.state = {

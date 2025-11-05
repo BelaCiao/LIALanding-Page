@@ -10,47 +10,40 @@ interface QuizFunnelProps {
 const initialStep = {
     id: 1,
     theme: 'dark',
-    key: 'serviceInterest',
-    question: 'Como podemos impulsionar seu negócio hoje?',
-    subtitle: 'Escolha a opção que melhor descreve sua necessidade.',
+    key: 'serviceType',
+    question: 'Qual tipo de solução de TI você precisa hoje?',
+    subtitle: 'Escolha a opção que melhor descreve sua necessidade para começarmos.',
     options: [
-        { text: 'Resolver problemas técnicos com um especialista em campo (Field Service).', path: 'fieldService' as const },
-        { text: 'Garantir suporte técnico ágil e remoto para minha operação (NOC/TI).', path: 'nocSupport' as const },
-        { text: 'Criar ou modernizar meu site para atrair mais clientes (Web Design).', path: 'webDesign' as const },
-        { text: 'Terceirizar minhas operações com um parceiro local estratégico no Sul-RS.', path: 'outsourcing' as const },
+        { text: 'Suporte Rápido e Remoto (para software, redes e sistemas).', path: 'remoteSupport' as const },
+        { text: 'Atendimento Presencial (para cabos, Wi-Fi, instalação e reparo).', path: 'onSiteService' as const },
+        { text: 'Montagem ou Reparo de Computadores (PCs Gamer, notebooks).', path: 'hardware' as const },
+        { text: 'Sou um Provedor de Internet e preciso de suporte especializado.', path: 'ispNoc' as const },
     ],
 };
 
 const quizPaths = {
-    fieldService: [
-        { id: 2, key: 'environment', question: 'Em que tipo de ambiente você precisa do nosso técnico?', options: ['Ambiente corporativo (escritórios, lojas)', 'Data Center ou POP de provedor', 'Residencial (atendendo seu cliente final)', 'Ambiente industrial ou externo'] },
-        { id: 3, key: 'frequency', question: 'Qual a frequência ou urgência dessa demanda?', options: ['É um projeto pontual com data para começar', 'Preciso de um técnico de forma recorrente (contrato)', 'É uma emergência (Break-Fix) para agora!', 'Estou apenas cotando para futuras necessidades'] },
-        { id: 4, key: 'serviceType', question: 'Qual o tipo de serviço mais comum que você precisa?', options: ['Instalação e configuração de equipamentos (IMAC)', 'Manutenção e reparo de hardware', 'Passagem de cabos e infraestrutura de rede', 'Site Survey (análise de local)'] },
-        { id: 5, key: 'sla', question: 'Você trabalha com SLAs (Acordos de Nível de Serviço) definidos?', options: ['Sim, temos SLAs rígidos com nossos clientes', 'Temos alguma flexibilidade nos prazos', 'Não, o foco é apenas resolver o problema', 'Ainda não trabalhamos com SLAs'] },
+    remoteSupport: [
+        { id: 2, key: 'userType', question: 'Este suporte é para qual finalidade?', options: ['Para minha empresa ou negócio', 'Para meu uso pessoal (residencial)'] },
+        { id: 3, key: 'problemType', question: 'Qual o principal desafio que você enfrenta?', options: ['Computador lento ou com vírus', 'Problemas de conexão com a internet/rede', 'Ajuda com um software ou sistema específico', 'Preciso de uma consultoria geral de TI'] },
     ],
-    nocSupport: [
-        { id: 2, key: 'focus', question: 'Qual será o foco principal do suporte remoto?', options: ['Atender e resolver problemas dos meus clientes finais', 'Monitorar minha infraestrutura de rede (servidores, switches)', 'Dar suporte para minha equipe técnica interna', 'Configurar equipamentos remotamente (CPEs, roteadores)'] },
-        { id: 3, key: 'hours', question: 'Em qual horário você mais precisa de suporte?', options: ['Apenas em horário comercial (8h-18h)', 'Estendido (manhã, tarde e noite)', '24/7, incluindo finais de semana e feriados', 'Sob demanda, para picos de trabalho'] },
-        { id: 4, key: 'teamSize', question: 'Como é sua equipe de NOC/TI hoje?', options: ['Sou eu ou uma equipe muito pequena', 'Temos uma equipe, mas está sobrecarregada', 'Não temos uma equipe dedicada para isso', 'Temos uma equipe, mas buscamos especialização'] },
-        { id: 5, key: 'goal', question: 'O que você mais espera alcançar com nosso suporte?', options: ['Reduzir o tempo de espera no atendimento', 'Aumentar a satisfação dos meus clientes', 'Liberar minha equipe para focar em tarefas estratégicas', 'Prevenir problemas com monitoramento proativo'] },
+    onSiteService: [
+        { id: 2, key: 'serviceType', question: 'Qual serviço presencial você precisa?', options: ['Instalação de rede de cabos ou fibra', 'Melhoria da cobertura e velocidade do Wi-Fi', 'Instalação de equipamentos (impressora, totem, etc)', 'Reparo físico em um computador ou servidor'] },
+        { id: 3, key: 'locationType', question: 'Onde será o atendimento?', options: ['Em um escritório ou loja comercial', 'Em minha residência', 'Em um condomínio (áreas comuns ou apartamentos)', 'Em um ambiente industrial ou Data Center'] },
     ],
-    webDesign: [
-        { id: 2, key: 'stage', question: 'Sobre seu projeto de site, em que estágio você está?', options: ['Estou começando do zero, não tenho nada', 'Já tenho um site, mas quero um totalmente novo', 'Quero apenas fazer melhorias e atualizações no meu site atual', 'Preciso de manutenção contínua e suporte'] },
-        { id: 3, key: 'feature', question: 'Qual funcionalidade é mais importante para seu novo site?', options: ['Ser visualmente incrível e profissional', 'Formulários de contato fáceis para gerar leads', 'Vender produtos online (E-commerce)', 'Blog para postar conteúdo e atrair visitantes'] },
-        { id: 4, key: 'content', question: 'Você já tem o conteúdo (textos, fotos) para o site?', options: ['Sim, tenho tudo pronto para começar', 'Tenho alguma coisa, mas vou precisar de ajuda', 'Não, preciso de ajuda para criar todo o conteúdo', 'Vou providenciar o conteúdo em breve'] },
-        { id: 5, key: 'timeline', question: 'Qual o seu prazo ideal para ter o site no ar?', options: ['O mais rápido possível (menos de 30 dias)', 'Dentro de 1 a 3 meses', 'Não tenho pressa, estou planejando com calma', 'Depende do orçamento'] },
+    hardware: [
+        { id: 2, key: 'hardwareService', question: 'Qual serviço de hardware você busca?', options: ['Montar um PC novo (Gamer ou para Trabalho)', 'Fazer um upgrade no meu PC atual', 'Consertar meu notebook ou desktop que não liga', 'Receber uma consultoria para escolher as melhores peças'] },
+        { id: 3, key: 'partsStatus', question: 'Você já possui as peças?', options: ['Sim, só preciso do serviço de montagem/instalação', 'Não, preciso de ajuda para escolher e comprar', 'É para um conserto, não sei qual é o problema/peça'] },
     ],
-    outsourcing: [
-        { id: 2, key: 'reason', question: 'Qual o principal motivo para buscar uma parceria de terceirização?', options: ['Expandir minha operação para o Sul do RS sem custo fixo', 'Reduzir custos com equipe e encargos trabalhistas', 'Garantir um parceiro técnico confiável para meus SLAs', 'Focar no meu negócio principal e deixar o TI com especialistas'] },
-        { id: 3, key: 'partnershipType', question: 'Que tipo de parceria você imagina?', options: ['White label: A LIANET atua em nome da minha empresa', 'Indicação: A LIANET é apresentada como parceira técnica', 'Atuação sob demanda: aciono conforme a necessidade', 'Contrato fixo para cobertura total na região'] },
-        { id: 4, key: 'volume', question: 'Qual o volume de chamados que você estima para a região?', options: ['Alto (mais de 10 chamados/mês)', 'Médio (entre 3 e 10 chamados/mês)', 'Baixo (até 3 chamados/mês)', 'Variável, depende de novos contratos'] },
-        { id: 5, key: 'criticalFactor', question: 'O que é mais crítico na escolha de um parceiro local?', options: ['Qualidade técnica e conhecimento comprovado', 'Agilidade no atendimento e cumprimento de prazos', 'Comunicação clara e relatórios detalhados', 'Preço competitivo'] },
+    ispNoc: [
+        { id: 2, key: 'nocNeed', question: 'Qual sua maior necessidade como provedor?', options: ['Suporte NOC remoto (N1/N2) para minha equipe', 'Configuração de ativos de rede (OLT, MikroTik, etc)', 'Um técnico de campo (Field Service) para atuar na região', 'Planejamento e otimização da minha rede'] },
+        { id: 3, key: 'supportModel', question: 'Qual modelo de suporte se encaixa melhor?', options: ['Contínuo durante o horário comercial (8h-14h)', 'Sob demanda, para projetos ou picos de trabalho', 'Apenas para emergências e chamados pontuais', 'Busco uma parceria estratégica de longo prazo'] },
     ]
 };
 
+
 type QuizPath = keyof typeof quizPaths;
 
-const TOTAL_STEPS = 1 + 4 + 1; // 1 initial, 4 path questions, 1 form
+const TOTAL_STEPS = 1 + 2 + 1; // 1 initial, 2 path questions, 1 form
 
 const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
     const [screen, setScreen] = useState<'quiz' | 'loading' | 'form' | 'success'>('quiz');
@@ -64,7 +57,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
 
     useEffect(() => {
         if (screen === 'loading') {
-            let loadingProgress = ((1 + 4) / TOTAL_STEPS) * 100;
+            let loadingProgress = ((1 + 2) / TOTAL_STEPS) * 100;
             setProgress(loadingProgress);
             const interval = setInterval(() => {
                 loadingProgress += 5;
@@ -224,8 +217,8 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                                 <input type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleInputChange} required className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="(XX) XXXXX-XXXX" />
                             </div>
                             <div className="relative">
-                                <label className="absolute -top-2 left-2 inline-block bg-base-100 px-1 text-xs font-medium text-content-200">Nome da sua Empresa</label>
-                                <input type="text" name="company" value={formData.company} onChange={handleInputChange} required className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="Digite o nome da empresa..." />
+                                <label className="absolute -top-2 left-2 inline-block bg-base-100 px-1 text-xs font-medium text-content-200">Nome da sua Empresa (Opcional)</label>
+                                <input type="text" name="company" value={formData.company} onChange={handleInputChange} className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="Digite o nome da empresa..." />
                             </div>
                              <div className="relative">
                                 <label className="absolute -top-2 left-2 inline-block bg-base-100 px-1 text-xs font-medium text-content-200">Seu E-mail Profissional</label>
@@ -237,7 +230,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                                     {isSubmitting ? 'ENVIANDO...' : 'SOLICITAR ORÇAMENTO'}
                                 </button>
                                 <a 
-                                    href="https://wa.me/5553999335369?text=Ol%C3%A1!%20Respondi%20o%20quiz%20da%20LIANET%20e%20gostaria%20de%20conversar."
+                                    href="https://wa.me/555399640159?text=Ol%C3%A1!%20Respondi%20o%20quiz%20da%20LIANET%20e%20gostaria%20de%20conversar."
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="w-full flex items-center justify-center gap-3 bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg text-lg font-bold hover:bg-green-50 transition-all transform hover:scale-105"
