@@ -5,89 +5,6 @@ import {
 } from './icons';
 
 
-const PartnershipForm: React.FC<{ sectionId: string; ctaText: string }> = ({ sectionId, ctaText }) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitMessage, setSubmitMessage] = useState('');
-    const [formData, setFormData] = useState({
-        name: '',
-        role: '',
-        company: '',
-        email: '',
-        phone: '',
-        service: 'Field Service',
-    });
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setSubmitMessage('');
-
-        const formPayload = {
-            _subject: "Novo Pedido de Parceria - LIANET Soluções",
-            "Nome Completo": formData.name,
-            "Cargo": formData.role,
-            "Empresa": formData.company,
-            "E-mail Corporativo": formData.email,
-            "Telefone": formData.phone,
-            "Serviço de Interesse": formData.service,
-        };
-
-        try {
-            const response = await fetch('https://formsubmit.co/ajax/maicongn@hotmail.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(formPayload)
-            });
-
-            if (response.ok) {
-                setSubmitMessage('Obrigado! Recebemos sua solicitação e entraremos em contato em breve.');
-                setFormData({ name: '', role: '', company: '', email: '', phone: '', service: 'Field Service' });
-            } else {
-                throw new Error('Falha ao enviar a mensagem.');
-            }
-        } catch (error) {
-            setSubmitMessage(`Ocorreu um erro. Por favor, tente novamente.`);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    return (
-        <div id={sectionId} className="bg-white rounded-xl p-6 sm:p-8 shadow-2xl w-full max-w-md border">
-            <h3 className="text-2xl font-bold text-primary text-center">Inicie sua Parceria com a LIANET</h3>
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Nome Completo" required className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none transition" />
-                <input type="text" name="role" value={formData.role} onChange={handleInputChange} placeholder="Seu Cargo" required className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none transition" />
-                <input type="text" name="company" value={formData.company} onChange={handleInputChange} placeholder="Nome da Empresa" required className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none transition" />
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="E-mail Corporativo" required className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none transition" />
-                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Telefone" required className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none transition" />
-                 <select name="service" value={formData.service} onChange={handleInputChange} className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none transition">
-                    <option>Field Service</option>
-                    <option>Suporte NOC</option>
-                </select>
-
-                <button type="submit" disabled={isSubmitting} className="w-full bg-secondary text-white px-6 py-3.5 rounded-lg text-lg font-bold hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg shadow-secondary/20 disabled:bg-green-400 disabled:cursor-not-allowed">
-                    {isSubmitting ? 'ENVIANDO...' : ctaText}
-                </button>
-            </form>
-            {submitMessage && (
-                <p className={`mt-4 text-sm text-center ${submitMessage.includes('erro') ? 'text-red-600' : 'text-green-600'}`}>
-                    {submitMessage}
-                </p>
-            )}
-        </div>
-    );
-};
-
-
 const useAnimateOnScroll = (options?: IntersectionObserverInit) => {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef<HTMLElement>(null);
@@ -143,7 +60,7 @@ const HomePage: React.FC<{ onScheduleClick: () => void }> = ({ onScheduleClick }
                 <div className="grid md:grid-cols-2 gap-12 items-center w-full">
                     <div className="animate-fade-in-up text-center md:text-left">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-                            Seu Parceiro Estratégico de <span className="text-secondary">Field Service e Suporte NOC</span> em Rio Grande/RS.
+                            Domine a Região Sul: <span className="text-secondary">Field Service & Suporte NOC</span> para Operações de Alta Performance.
                         </h1>
                         <p className="mt-6 max-w-2xl mx-auto md:mx-0 text-lg text-gray-300">
                             Reduza custos operacionais e garanta o cumprimento de SLAs. Somos a extensão da sua equipe técnica em campo, com expertise em ambientes de alta criticidade.
@@ -262,15 +179,24 @@ const HomePage: React.FC<{ onScheduleClick: () => void }> = ({ onScheduleClick }
 
             {/* Seção 5: CTA Final */}
             <section ref={ctaRef} id="cta" className={`${sectionBaseClasses} ${isCtaVisible ? 'opacity-100' : 'opacity-0 translate-y-8'}`}>
-                <div className="bg-primary/90 backdrop-blur-sm border border-white/10 rounded-xl max-w-6xl mx-auto p-12 sm:p-16 text-center grid lg:grid-cols-2 gap-12 items-center">
-                    <div className="text-left">
-                        <h2 className="text-3xl sm:text-4xl font-bold text-white">Garanta sua Cobertura Técnica em Rio Grande e Região.</h2>
-                        <p className="mt-4 max-w-2xl text-lg text-gray-200">
-                           Não perca mais contratos por falta de um parceiro local confiável. Fale conosco e descubra como podemos ser a extensão da sua equipe.
-                        </p>
-                    </div>
-                     <div className="flex justify-center">
-                        <PartnershipForm sectionId="form-partnership" ctaText="SOLICITAR CONTATO" />
+                <div className="bg-primary/90 backdrop-blur-sm border border-white/10 rounded-xl max-w-5xl mx-auto p-12 sm:p-16 text-center">
+                    <h2 className="text-3xl sm:text-4xl font-bold text-white">Pronto para Começar?</h2>
+                    <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-200">
+                       Nosso processo é ágil e direto. Após o primeiro contato, agendamos uma chamada via <span className="font-bold text-white">WhatsApp</span> ou <span className="font-bold text-white">Google Meet</span> para entender suas necessidades e fechar a parceria.
+                    </p>
+                     <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <button onClick={onScheduleClick} className="w-full sm:w-auto bg-secondary text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg shadow-secondary/20">
+                            FAÇA UM ORÇAMENTO
+                        </button>
+                        <a 
+                            href="https://wa.me/5553999335369" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-full sm:w-auto bg-white/10 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-white/20 transition-all transform hover:scale-105 flex items-center justify-center gap-3"
+                        >
+                            <WhatsappIcon className="h-6 w-6"/>
+                            <span>Falar no WhatsApp</span>
+                        </a>
                     </div>
                 </div>
             </section>

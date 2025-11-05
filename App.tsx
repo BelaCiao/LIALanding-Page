@@ -41,7 +41,7 @@ const Footer: React.FC = () => (
                 <LianetLogo />
                 <span className="text-2xl font-bold">LIANET Soluções</span>
             </div>
-            <p className="text-gray-400">Seu parceiro estratégico de Field Service e Suporte NOC em Rio Grande/RS.</p>
+            <p className="text-gray-400">Seu parceiro estratégico de Field Service e Suporte NOC na Região Sul.</p>
             <p className="mt-8 text-sm text-gray-500">&copy; {new Date().getFullYear()} LIANET Soluções. Todos os direitos reservados.</p>
         </div>
     </footer>
