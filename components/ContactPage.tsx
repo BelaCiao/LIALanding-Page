@@ -30,11 +30,12 @@ const ContactPage: React.FC = () => {
                 form.reset();
             } else {
                 const data = await response.json();
+                console.error("Contact form submission failed:", data);
                 throw new Error(data.message || 'Falha ao enviar a mensagem.');
             }
         } catch (error: any) {
             setSubmitMessage(`Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.`);
-            console.error(error);
+            console.error("An error occurred during contact form submission:", error);
         } finally {
             setIsSubmitting(false);
         }

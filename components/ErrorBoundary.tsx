@@ -39,14 +39,11 @@ const FallbackErrorScreen: React.FC<{ error: Error | null }> = ({ error }) => {
 
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: Replaced the state class property with a constructor to properly initialize state and resolve the props typing issue.
-  public constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-    };
-  }
+  // FIX: Replaced the constructor with a state class property to properly initialize state. This resolves TypeScript errors where 'state' and 'props' were not recognized on the component instance.
+  public state: State = {
+    hasError: false,
+    error: null,
+  };
 
   public static getDerivedStateFromError(error: Error): State {
     // Update state so the next render will show the fallback UI.

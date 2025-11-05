@@ -123,13 +123,14 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
         
         const formPayload = {
             _subject: "Novo Lead Qualificado (Quiz) - LIANET Soluções",
+            _captcha: "false",
             Nome: formData.name,
             Whatsapp: formData.whatsapp,
             Email: formData.email,
             Empresa: formData.company,
-            "Interesse Principal": answers[initialStep.key],
+            [initialStep.question]: answers[initialStep.key],
             ...(currentPath && Object.fromEntries(
-                quizPaths[currentPath].map(q => [`Q: ${q.question}`, answers[q.key] || 'Não respondido'])
+                quizPaths[currentPath].map(q => [q.question, answers[q.key] || 'Não respondido'])
             ))
         };
 
@@ -145,6 +146,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
             
             if (!response.ok) {
                  const data = await response.json();
+                 console.error("Form submission failed:", data);
                  throw new Error(data.message || 'Ocorreu um erro ao enviar seus dados.');
             }
 
@@ -152,6 +154,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
             setScreen('success');
 
         } catch (error: any) {
+            console.error("An error occurred during form submission:", error);
             setMessage({ type: 'error', text: error.message });
         } finally {
             setIsSubmitting(false);
