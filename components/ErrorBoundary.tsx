@@ -39,6 +39,9 @@ const FallbackErrorScreen: React.FC<{ error: Error | null }> = ({ error }) => {
 
 
 class ErrorBoundary extends Component<Props, State> {
+  // FIX: Replaced the constructor with a class property for state initialization.
+  // This is a more modern and concise approach that correctly types `this.state`
+  // and resolves errors related to 'state' and 'props' properties not being found.
   public state: State = {
     hasError: false,
     error: null,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BackArrowIcon, ChevronRightIcon, SuccessIcon } from './icons';
+import { BackArrowIcon, ChevronRightIcon, SuccessIcon, WhatsappIcon } from './icons';
 import ParticleBackground from './ParticleBackground';
 
 interface QuizFunnelProps {
@@ -10,53 +10,69 @@ const quizSteps = [
     {
         id: 1,
         theme: 'dark',
-        key: 'bottleneck',
-        question: 'Qual destas opções está sendo o maior gargalo na sua clínica?',
-        subtitle: 'Selecione uma opção para personalizar a demonstração',
+        key: 'serviceInterest',
+        question: 'Para começar, qual solução melhor atende sua necessidade?',
+        subtitle: 'Isso nos ajuda a direcionar para o especialista certo.',
         options: [
-            'Não consigo gerar demanda',
-            'Leads não respondem',
-            'Baixo volume de agendamentos',
-            'Poucos comparecimentos',
-            'Outros',
+            'Técnicos em Campo (Field Service): Suporte presencial para resolver qualquer demanda de TI.',
+            'Suporte Remoto e Monitoramento (NOC): Gestão proativa e solução de problemas à distância.',
+            'Criação de Sites e Presença Digital: Fortaleça sua marca com um site profissional e moderno.',
+            'Parceria de Terceirização (Outsourcing): Tenha a LIANET como sua equipe de TI dedicada no Sul-RS.',
         ],
     },
     {
         id: 2,
         theme: 'dark',
-        key: 'leadsPerDay',
-        question: 'Quantos novos Leads você recebe por dia no Whatsapp?',
-        subtitle: 'Selecione uma opção',
+        key: 'mainChallenge',
+        question: 'Qual é o seu maior desafio atualmente?',
+        subtitle: 'Entender seu desafio é o primeiro passo para a solução.',
         options: [
-            'Menos de 10 por Dia',
-            'Entre 11 e 20 por Dia',
-            'Entre 21 e 30 por Dia',
-            'Entre 31 e 50 por Dia',
-            'Acima de 50 por Dia',
+            'Reduzir custos operacionais com equipe de TI.',
+            'Garantir atendimento técnico rápido e eficaz para meus clientes.',
+            'Expandir minha área de atuação para a região de Rio Grande/RS.',
+            'Melhorar a imagem e o alcance digital da minha empresa.',
         ],
     },
     {
         id: 3,
         theme: 'dark',
-        key: 'secretaries',
-        question: 'Quantas Secretárias?',
-        options: ['Apenas 1', '2', '3', '4', '5 ou mais'],
+        key: 'companyProfile',
+        question: 'Como você descreveria sua empresa?',
+        subtitle: 'Isso nos ajuda a entender o seu contexto.',
+        options: [
+            'Sou uma Integradora de TI ou Provedor de Internet.',
+            'Tenho uma empresa e preciso de suporte de TI.',
+            'Sou um profissional autônomo buscando parceria.',
+            'Outro tipo de negócio.',
+        ],
+    },
+    {
+        id: 4,
+        theme: 'dark',
+        key: 'urgency',
+        question: 'Qual a sua urgência para implementar uma solução?',
+        subtitle: 'Isso nos ajuda a priorizar seu contato.',
+        options: [
+            'Imediata, tenho uma demanda crítica.',
+            'Alta (nos próximos 30 dias).',
+            'Média (nos próximos 3 meses).',
+            'Baixa (estou apenas pesquisando/planejando).',
+        ],
     },
 ];
+
 
 const TOTAL_STEPS = quizSteps.length + 2; // Questions + Loading + Form
 
 const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
-    const [formData, setFormData] = useState({ name: '', whatsapp: '', instagram: '', email: '' });
+    const [formData, setFormData] = useState({ name: '', whatsapp: '', company: '', email: '' });
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
     const [progress, setProgress] = useState(0);
     
-    const isDarkTheme = step < 2 || step >= quizSteps.length;
-
     useEffect(() => {
         // Handle loading simulation
         if (step === quizSteps.length) {
@@ -104,15 +120,13 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
         setMessage(null);
         
         const formPayload = {
-            _subject: "Você tem um novo LEAD! - LIA IA CRM",
-            _sms: "+5553999335369",
-            _smsMessage: `Você tem um novo LEAD! Nome: ${formData.name}, WhatsApp: ${formData.whatsapp}.`,
+            _subject: "Novo Lead Qualificado (Quiz) - LIANET Soluções",
             Nome: formData.name,
             Whatsapp: formData.whatsapp,
             Email: formData.email,
-            Instagram: formData.instagram,
+            Empresa: formData.company,
             ...Object.fromEntries(
-                Object.entries(answers).map(([key, value]) => [`Resposta Quiz (${key})`, value])
+                quizSteps.map(q => [`Q: ${q.question}`, answers[q.key] || 'Não respondido'])
             )
         };
 
@@ -146,21 +160,17 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
             const currentQuestion = quizSteps[step];
             return (
                 <div key={currentQuestion.id} className="w-full max-w-2xl px-6 text-center animate-fade-in-up">
-                    <h1 className={`text-3xl sm:text-4xl font-bold ${currentQuestion.theme === 'dark' ? 'text-white' : 'text-content-100'}`}>{currentQuestion.question}</h1>
-                    {currentQuestion.subtitle && <p className={`mt-3 text-lg ${currentQuestion.theme === 'dark' ? 'text-gray-300' : 'text-content-200'}`}>{currentQuestion.subtitle}</p>}
+                    <h1 className={`text-3xl sm:text-4xl font-bold text-white`}>{currentQuestion.question}</h1>
+                    {currentQuestion.subtitle && <p className={`mt-3 text-lg text-gray-300`}>{currentQuestion.subtitle}</p>}
                     <div className="mt-10 grid grid-cols-1 gap-3">
                         {currentQuestion.options.map((option, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleSelectOption(currentQuestion.key, option)}
-                                className={`w-full text-left p-4 rounded-lg text-lg font-medium transition-all duration-200 transform hover:scale-105 ${
-                                    currentQuestion.theme === 'dark'
-                                    ? 'bg-gray-800/50 hover:bg-gray-700/80 text-white flex justify-between items-center backdrop-blur-sm'
-                                    : 'bg-base-100 hover:bg-base-300 border border-base-300 text-content-100'
-                                }`}
+                                className={`w-full text-left p-4 rounded-lg text-lg font-medium transition-all duration-200 transform hover:scale-105 bg-gray-800/50 hover:bg-gray-700/80 text-white flex justify-between items-center backdrop-blur-sm`}
                             >
                                 {option}
-                                {currentQuestion.theme === 'dark' && <ChevronRightIcon />}
+                                <ChevronRightIcon />
                             </button>
                         ))}
                     </div>
@@ -172,7 +182,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
              return (
                 <div className="w-full max-w-lg px-6 text-center animate-fade-in text-white">
                     <h2 className="text-3xl font-bold">Analisando suas respostas...</h2>
-                    <p className="mt-2 text-gray-300">Estamos preparando uma demonstração personalizada para você.</p>
+                    <p className="mt-2 text-gray-300">Estamos preparando para te conectar com um especialista.</p>
                     <div className="mt-6 w-full bg-white/20 rounded-full h-2.5">
                         <div className="bg-white h-2.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
                     </div>
@@ -185,8 +195,8 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
             return (
                 <div className="w-full max-w-md bg-base-100 p-8 rounded-xl shadow-2xl animate-fade-in-up mx-4">
                     <div className="text-center">
-                        <h1 className="text-3xl font-bold text-content-100">Demonstração Pronta!</h1>
-                        <p className="mt-2 text-content-200">Preencha seus dados para receber uma demonstração com o especialista.</p>
+                        <h1 className="text-3xl font-bold text-content-100">Estamos quase lá!</h1>
+                        <p className="mt-2 text-content-200">Preencha seus dados para que nosso especialista entre em contato.</p>
                     </div>
                     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
                         <div className="relative">
@@ -195,20 +205,32 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                         </div>
                         <div className="relative">
                             <label className="absolute -top-2 left-2 inline-block bg-base-100 px-1 text-xs font-medium text-content-200">Qual seu Whatsapp?</label>
-                            <input type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleInputChange} required className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="Digite seu whatsapp..." />
+                            <input type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleInputChange} required className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="(XX) XXXXX-XXXX" />
                         </div>
                         <div className="relative">
-                            <label className="absolute -top-2 left-2 inline-block bg-base-100 px-1 text-xs font-medium text-content-200">@ do Instagram da sua Clínica</label>
-                            <input type="text" name="instagram" value={formData.instagram} onChange={handleInputChange} required className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="Digite seu instagram..." />
+                            <label className="absolute -top-2 left-2 inline-block bg-base-100 px-1 text-xs font-medium text-content-200">Nome da sua Empresa</label>
+                            <input type="text" name="company" value={formData.company} onChange={handleInputChange} required className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="Digite o nome da empresa..." />
                         </div>
                          <div className="relative">
                             <label className="absolute -top-2 left-2 inline-block bg-base-100 px-1 text-xs font-medium text-content-200">Seu E-mail Profissional</label>
                             <input type="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full px-4 py-3 bg-transparent rounded-lg border-2 border-base-300 focus:ring-1 focus:ring-primary focus:outline-none focus:border-primary transition" placeholder="Digite seu e-mail" />
                         </div>
-                        <button type="submit" disabled={isSubmitting} className="w-full bg-brand-dark text-white px-6 py-3.5 rounded-lg text-lg font-bold hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg shadow-gray-500/20 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:scale-100">
-                            {isSubmitting ? 'ENVIANDO...' : 'QUERO VER UMA DEMONSTRAÇÃO'}
-                        </button>
-                        {message && message.type === 'error' && <p className="text-red-500 text-sm text-center">{message.text}</p>}
+                        
+                        <div className="pt-2 space-y-4">
+                            <button type="submit" disabled={isSubmitting} className="w-full bg-secondary text-white px-6 py-3.5 rounded-lg text-lg font-bold hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg shadow-green-500/20 disabled:bg-green-400 disabled:cursor-not-allowed disabled:scale-100">
+                                {isSubmitting ? 'ENVIANDO...' : 'SOLICITAR ORÇAMENTO'}
+                            </button>
+                            <a 
+                                href="https://wa.me/5553999335369?text=Ol%C3%A1!%20Respondi%20o%20quiz%20da%20LIANET%20e%20gostaria%20de%20conversar."
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="w-full flex items-center justify-center gap-3 bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg text-lg font-bold hover:bg-green-50 transition-all transform hover:scale-105"
+                            >
+                                <WhatsappIcon className="h-6 w-6"/>
+                                <span>Prefiro chamar no WhatsApp</span>
+                            </a>
+                        </div>
+                        {message && message.type === 'error' && <p className="text-red-500 text-sm text-center mt-2">{message.text}</p>}
                     </form>
                 </div>
             )
@@ -220,7 +242,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                     <SuccessIcon />
                     <h1 className="mt-8 text-4xl font-bold text-white">Deu tudo certo!</h1>
                     <p className="mt-4 text-lg text-gray-300 max-w-md">
-                        Em até 12 horas nossa equipe vai te ligar e agendar uma demonstração com um de nossos especialistas.
+                        Obrigado! Em breve nossa equipe entrará em contato para alinhar os próximos passos da nossa parceria.
                     </p>
                     <button onClick={onClose} className="mt-10 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all">
                         Fechar
@@ -234,9 +256,9 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
 
     const isCurrentStepDark = () => {
         if (step < quizSteps.length) {
-            return quizSteps[step].theme === 'dark';
+            return true;
         }
-        // Form step is light, success is dark
+        // Form step is light, loading/success is dark
         return step === quizSteps.length || step === quizSteps.length + 2;
     };
 
@@ -270,7 +292,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
                 </div>
 
                 <div className={`absolute bottom-4 text-xs ${isBgDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    &copy; {new Date().getFullYear()} LIA IA CRM.
+                    &copy; {new Date().getFullYear()} LIANET Soluções.
                 </div>
             </div>
         </div>

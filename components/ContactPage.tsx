@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { LiaLogo, LiaAiIcon } from './icons';
 
 const ContactPage: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
