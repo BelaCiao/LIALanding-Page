@@ -12,7 +12,7 @@ const ContactPage: React.FC = () => {
 
         const form = e.currentTarget;
         const formData = new FormData(form);
-        formData.append('_subject', 'Novo Contato - Landing Page LIA IA');
+        formData.append('_subject', 'Novo Lead LIANET');
         const formJson = Object.fromEntries(formData.entries());
 
         try {

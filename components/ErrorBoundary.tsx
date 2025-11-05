@@ -39,11 +39,14 @@ const FallbackErrorScreen: React.FC<{ error: Error | null }> = ({ error }) => {
 
 
 class ErrorBoundary extends Component<Props, State> {
-  // FIX: Replaced the constructor with a state class property to properly initialize state. This resolves TypeScript errors where 'state' and 'props' were not recognized on the component instance.
-  public state: State = {
-    hasError: false,
-    error: null,
-  };
+  // FIX: The state class property was replaced with a constructor to explicitly initialize state and call super(props). This ensures that `this.props` is correctly typed and available throughout the component, resolving the "Property 'props' does not exist" error.
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+    };
+  }
 
   public static getDerivedStateFromError(error: Error): State {
     // Update state so the next render will show the fallback UI.

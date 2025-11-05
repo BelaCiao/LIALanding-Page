@@ -122,7 +122,7 @@ const QuizFunnel: React.FC<QuizFunnelProps> = ({ onClose }) => {
         setMessage(null);
         
         const formPayload = {
-            _subject: "Novo Lead Qualificado (Quiz) - LIANET Soluções",
+            _subject: "Novo Lead LIANET",
             _captcha: "false",
             Nome: formData.name,
             Whatsapp: formData.whatsapp,
